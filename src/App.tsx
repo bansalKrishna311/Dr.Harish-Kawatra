@@ -18,6 +18,7 @@ import Tables from './pages/Tables';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
 import PatientRecords from './components/Patients/PatientsRecords';
+import FamilyRecords from './components/Families/familyRecords';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -104,6 +105,16 @@ function App() {
             </>
           }
         />
+         <Route
+          path="/families/family-records"
+          element={
+            <>
+              <PageTitle title="family's Records | All Patients" />
+              <FamilyRecords />
+            </>
+          }
+        />
+
 
         {/* Other Routes */}
         <Route

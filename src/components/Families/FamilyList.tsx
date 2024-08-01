@@ -26,7 +26,7 @@ const FamilyList = () => {
 
   // Function to handle the view button click
   const handleViewClick = () => {
-    navigate('/patients/patient-records'); // Redirect to the patient records page
+    navigate('/families/family-records'); // Redirect to the patient records page
   };
 
   return (
