@@ -11,7 +11,7 @@ interface DropdownProps {
   id: string;
 }
 
-const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
+const SelectGroupThree: React.FC<DropdownProps> = ({ id }) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [show, setShow] = useState(false);
@@ -95,13 +95,15 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
 
   return (
     <div className="relative z-50">
-      
+      <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+        SelectGroupThree Dropdown
+      </label>
       <div>
         <select className="hidden" id={id}>
-          <option value="1">Patient 2</option>
-          <option value="2">Patient 3</option>
-          <option value="3">Patient 4</option>
-          <option value="4">Patient 5</option>
+          <option value="1">Option 2</option>
+          <option value="2">Option 3</option>
+          <option value="3">Option 4</option>
+          <option value="4">Option 5</option>
         </select>
 
         <div className="flex flex-col items-center">
@@ -147,7 +149,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
                     {selected.length === 0 && (
                       <div className="flex-1">
                         <input
-                          placeholder="Select a Patient"
+                          placeholder="Select an option"
                           className="h-full w-full appearance-none bg-transparent p-1 px-2 outline-none"
                           defaultValue={selectedValues()}
                         />
@@ -221,4 +223,4 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
   );
 };
 
-export default MultiSelect;
+export default SelectGroupThree;
