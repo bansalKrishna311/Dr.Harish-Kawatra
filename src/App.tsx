@@ -75,6 +75,15 @@ function App() {
             </>
           }
         />
+        <Route
+          path="/patients/patient-records"
+          element={
+            <>
+              <PageTitle title="Patient's Records | All Visits" />
+              <PatientRecords />
+            </>
+          }
+        />
 
         {/* Families Routes */}
         <Route
@@ -86,17 +95,6 @@ function App() {
             </>
           }
         />
-
-<Route
-          path="/patients/patients-records"
-          element={
-            <>
-              <PageTitle title="Patient's Records | All Visits" />
-              <PatientRecords />
-            </>
-          }
-        />
-
         <Route
           path="/families/list"
           element={

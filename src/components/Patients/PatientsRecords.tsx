@@ -16,7 +16,7 @@ const patientData: Patient[] = [
   { patientID: 378, patientName: 'MRS. PUJA KONDAL', diseaseName: 'COUGH, COLD, FEVER', date: '2022-09-08' },
 ];
 
-const PatientRecords = () => {
+const PatientsRecords = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
@@ -53,4 +53,4 @@ const PatientRecords = () => {
   );
 };
 
-export default PatientRecords;
+export default PatientsRecords;

@@ -1,8 +1,8 @@
+import React from 'react';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
-import { Package } from '../../types/package';
+import { useNavigate } from 'react-router-dom';
 
-// Update the type to reflect Family data
-const packageData: Package[] = [
+const packageData = [
   {
     name: 'Family 1',
     invoiceDate: 'Jan 13, 2023', // This can be removed if no longer needed
@@ -22,6 +22,13 @@ const packageData: Package[] = [
 ];
 
 const FamilyList = () => {
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  // Function to handle the view button click
+  const handleViewClick = () => {
+    navigate('/patients/patient-records'); // Redirect to the patient records page
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
@@ -64,6 +71,7 @@ const FamilyList = () => {
                     <button
                       aria-label="View"
                       className="bg-yellow-500 hover:bg-yellow-700 text-white p-1 rounded"
+                      onClick={handleViewClick} // Handle the view button click
                     >
                       <FaEye className="w-4 h-4" />
                     </button>
