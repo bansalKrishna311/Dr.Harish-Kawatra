@@ -17,6 +17,7 @@ import FormLayout from './pages/Form/FormLayout';
 import Tables from './pages/Tables';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
+import PatientRecords from './components/Patients/PatientsRecords';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -85,6 +86,17 @@ function App() {
             </>
           }
         />
+
+<Route
+          path="/patients/patients-records"
+          element={
+            <>
+              <PageTitle title="Patient's Records | All Visits" />
+              <PatientRecords />
+            </>
+          }
+        />
+
         <Route
           path="/families/list"
           element={
