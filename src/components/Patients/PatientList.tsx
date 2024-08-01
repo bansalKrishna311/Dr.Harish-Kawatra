@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,8 +17,22 @@ const packageData: Package[] = [
   { id: '4', name: 'Patient 4', invoiceDate: 'Jan 13, 2023' },
 ];
 
+// Sample families data
+const families = ['Family A', 'Family B', 'Family C'];
+
 const PatientList = () => {
   const navigate = useNavigate(); // Initialize useNavigate hook
+
+  // State to manage the selected family for each patient
+  const [selectedFamilies, setSelectedFamilies] = useState<Record<string, string>>({});
+
+  // Handle change in dropdown for each patient
+  const handleFamilyChange = (patientId: string, event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedFamilies({
+      ...selectedFamilies,
+      [patientId]: event.target.value,
+    });
+  };
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -27,13 +41,16 @@ const PatientList = () => {
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-              PatientID
+                PatientID
               </th>
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white">
                 Patient Name
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
                 Actions
+              </th>
+              <th className="py-4 px-4 font-medium text-black dark:text-white">
+                Family
               </th>
             </tr>
           </thead>
@@ -76,7 +93,21 @@ const PatientList = () => {
                     </button>
                   </div>
                 </td>
-              </tr>
+                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                  <select
+                    value={selectedFamilies[packageItem.id] || ''}
+                    onChange={(e) => handleFamilyChange(packageItem.id, e)}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <option value="">Select a family</option>
+                    {families.map((family, index) => (
+                      <option key={index} value={family}>
+                        {family}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+              </tr> 
             ))}
           </tbody>
         </table>
@@ -86,3 +117,4 @@ const PatientList = () => {
 };
 
 export default PatientList;
+  
