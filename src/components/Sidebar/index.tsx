@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import Logo from '../../images/logo/logo.svg';
+import AddPatient from '../Patients/AddPatient';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -75,7 +76,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           aria-expanded={sidebarOpen}
           className="block lg:hidden"
         >
-          =
+          
         </button>
       </div>
       {/* SIDEBAR HEADER */}
