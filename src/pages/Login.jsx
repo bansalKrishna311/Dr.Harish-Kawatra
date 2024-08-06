@@ -33,11 +33,9 @@ const Login = () => {
         }
     };
 
-    // Placeholder for background image URL
-    const bg = "url('../assets/loginbg.jpg')";
 
     return (
-        <div className='h-[48.325rem]' style={{ background: `url(${bg}) no-repeat center center/cover` }}>
+        <div className='h-[48.325rem]'>
             <div>
                 <div className="flex min-h-[80vh] flex-col justify-center py-12 sm:px-6 lg:px-8">
                     <div className="text-center sm:mx-auto sm:w-full sm:max-w-md">

@@ -11,8 +11,6 @@ const Signup = () => {
         name: '',
         email: '',
         password: '',
-        batch: '',
-        role: 'student'
     });
     const [showPassword, setShowPassword] = useState(false);
 
