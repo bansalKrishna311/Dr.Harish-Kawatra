@@ -21,7 +21,7 @@ import PatientRecords from './components/Patients/PatientsRecords';
 import FamilyRecords from './components/Families/familyRecords';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-
+import Home from './pages/Home';
 
 export const UserContext = createContext();
 
@@ -57,6 +57,7 @@ function App() {
           element={
             <DefaultLayout>
               <PageTitle title="Home | Dr.Kawatra" />
+              <Home/>
             </DefaultLayout>
           }
         />
