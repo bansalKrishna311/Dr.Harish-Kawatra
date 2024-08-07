@@ -22,7 +22,7 @@ const Login = () => {
                 if (response.status === 200) {
                     handleLogin(response.data); 
                     toast.success("Login successful");
-                    window.location = "/"; 
+                    window.location = "/home"; 
                 }
             } catch (err) {
                 console.error(err);
