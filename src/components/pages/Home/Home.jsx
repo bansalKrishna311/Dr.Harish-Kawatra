@@ -1,7 +1,7 @@
 // src/Home.js
 
 import React from "react";
-import img from "../pages/homeimg.png";
+import img from "./homeimg.png";
 
 const Home = () => {
   return (

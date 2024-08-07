@@ -19,7 +19,7 @@ import PatientRecords from './components/pages/Patients/PatientsRecords';
 import FamilyRecords from './components/pages/Families/familyRecords';
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
-import Home from './components/pages/Home';
+import Home from './components/pages/Home/Home';
 
 export const UserContext = createContext();
 
