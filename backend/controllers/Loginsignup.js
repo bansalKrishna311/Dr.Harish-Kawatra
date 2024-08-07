@@ -5,7 +5,7 @@ require('dotenv').config();
 
 // signup handler
 exports.signup = async (req,res)=>{
-    const {name,email,password,role,batch} = req.body;
+    const {name,email,password} = req.body;
     try{
         // check if user already exists or not
         const user = await UserSchema.findOne({email});
@@ -31,8 +31,8 @@ exports.signup = async (req,res)=>{
 
         // create entry for User
         const newUser = new UserSchema({
-            name,email,password:hashpassword, role: role?role:"student",
-            batch,
+            name,email,password:hashpassword, 
+            
         })
     
         newUser.save();

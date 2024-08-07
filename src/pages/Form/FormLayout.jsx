@@ -2,22 +2,22 @@ import { useState } from 'react';
 import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne'; // Make sure this import path is correct
 
 const FormLayout = () => {
-  const [symptoms, setSymptoms] = useState<string[]>(['']);
-  const [diseases, setDiseases] = useState<string[]>(['']);
-  const [medicines, setMedicines] = useState<string[]>(['']);
-  const [historyDiseases, setHistoryDiseases] = useState<string[]>(['']);
-  const [historyMedicines, setHistoryMedicines] = useState<string[]>(['']);
-  const [historyRemarks, setHistoryRemarks] = useState<string>('');
+  const [symptoms, setSymptoms] = useState(['']);
+  const [diseases, setDiseases] = useState(['']);
+  const [medicines, setMedicines] = useState(['']);
+  const [historyDiseases, setHistoryDiseases] = useState(['']);
+  const [historyMedicines, setHistoryMedicines] = useState(['']);
+  const [historyRemarks, setHistoryRemarks] = useState('');
 
-  const handleAddField = (setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+  const handleAddField = (setter) => {
     setter(prev => [...prev, '']);
   };
 
-  const handleRemoveField = (index: number, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+  const handleRemoveField = (index, setter) => {
     setter(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleChange = (index: number, value: string, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+  const handleChange = (index, value,setter) => {
     setter(prev => prev.map((item, i) => (i === index ? value : item)));
   };
 

@@ -17,10 +17,11 @@ const Signup = () => {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+    console.log(formData);
 
     
 
-    const handleSubmit = async (e) => {
+     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(
@@ -28,10 +29,21 @@ const Signup = () => {
                 formData
             );
             if (response.status === 200) {
-                toast.success('Signup successful');
+                alert('Signup successful');
             }
         } catch (err) {
             console.error(err);
+            if (err.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                toast.error(err.response.data.message || 'Signup failed');
+            } else if (err.request) {
+                // The request was made but no response was received
+                toast.error('No response from server');
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                toast.error('Error in signup request');
+            }
         }
     };
 
@@ -112,28 +124,7 @@ const Signup = () => {
                                     </span>
                                 </div>
                             </div>
-                            <div className="mb-4">
-                                <label
-                                    htmlFor="batch"
-                                    className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-700"
-                                >
-                                    Select an option
-                                </label>
-                                <select
-                                    onChange={handleChange}
-                                    name="batch"
-                                    value={formData.batch}
-                                    id="batch"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-white dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                >
-                                    <option value="">
-                                        Choose your Batch
-                                    </option>
-                                    <option value="Super60">Super60</option>
-                                    <option value="The Uniques">The Uniques</option>
-                                    <option value="academics">Regular Academics</option>
-                                </select>
-                            </div>
+                            
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
                                     <input
