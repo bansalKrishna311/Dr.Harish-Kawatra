@@ -1,27 +1,25 @@
 import { useEffect, useState, createContext } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
-import Loader from './common/Loader';
+import Loader from './components/pages/Loader';
 import PageTitle from './components/PageTitle';
 
 // Import pages for Patients and Families
-import AddPatient from './components/Patients/AddPatient';
-import ExistingPatient from './components/Patients/ExistingPatient';
-import PatientList from './components/Patients/PatientList';
-import AddNewFamily from './components/Families/AddNewFamily';
-import FamilyList from './components/Families/FamilyList';
+import AddPatient from './components/pages/Patients/AddPatient';
+import ExistingPatient from './components/pages/Patients/ExistingPatient';
+import PatientList from './components/pages/Patients/PatientList';
+import AddNewFamily from './components/pages/Families/AddNewFamily';
+import FamilyList from './components/pages/Families/FamilyList';
 
-import FormElements from './pages/Form/FormElements';
-import FormLayout from './pages/Form/FormLayout';
 
-import Tables from './pages/Tables';
-import Buttons from './pages/UiElements/Buttons';
+
+
 import DefaultLayout from './layout/DefaultLayout';
-import PatientRecords from './components/Patients/PatientsRecords';
-import FamilyRecords from './components/Families/familyRecords';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Home from './pages/Home';
+import PatientRecords from './components/pages/Patients/PatientsRecords';
+import FamilyRecords from './components/pages/Families/familyRecords';
+import Login from './components/pages/Login';
+import Signup from './components/pages/Signup';
+import Home from './components/pages/Home';
 
 export const UserContext = createContext();
 
@@ -57,7 +55,7 @@ function App() {
           element={
             <DefaultLayout>
               <PageTitle title="Home | Dr.Kawatra" />
-              <Home/>
+              <Home />
             </DefaultLayout>
           }
         />
@@ -70,7 +68,7 @@ function App() {
             </LoginLayout>
           }
         />
-          <Route
+        <Route
           path="/Signup"
           element={
             <LoginLayout>
@@ -145,43 +143,7 @@ function App() {
             </DefaultLayout>
           }
         />
-        {/* Other Routes */}
-        <Route
-          path="/forms/form-elements"
-          element={
-            <DefaultLayout>
-              <PageTitle title="Form Elements | Your Application" />
-              <FormElements />
-            </DefaultLayout>
-          }
-        />
-        <Route
-          path="/forms/form-layout"
-          element={
-            <DefaultLayout>
-              <PageTitle title="Form Layout | Your Application" />
-              <FormLayout />
-            </DefaultLayout>
-          }
-        />
-        <Route
-          path="/tables"
-          element={
-            <DefaultLayout>
-              <PageTitle title="Tables | Your Application" />
-              <Tables />
-            </DefaultLayout>
-          }
-        />
-        <Route
-          path="/ui/buttons"
-          element={
-            <DefaultLayout>
-              <PageTitle title="Buttons | Your Application" />
-              <Buttons />
-            </DefaultLayout>
-          }
-        />
+
       </Routes>
     </UserContext.Provider>
   );
