@@ -268,7 +268,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       </div>
       {/* Sign Out Button */}
       <div className="flex-shrink-0 p-5">
-        <button className="w-full p-3 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none">
+        <button className="w-full p-3 bg-red text-white rounded-lg hover:bg-red-700 focus:outline-none">
           Sign Out
         </button>
       </div>

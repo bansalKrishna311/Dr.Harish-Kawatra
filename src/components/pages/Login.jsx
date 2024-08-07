@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import { UserContext } from '../App';
+import { UserContext } from '../../App';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";

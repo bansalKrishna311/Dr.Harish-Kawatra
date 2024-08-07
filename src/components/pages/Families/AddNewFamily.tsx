@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import MultiSelect from '../Forms/SelectGroup/MultiSelect';
+import MultiSelect from '../../SelectGroup/MultiSelect';
 
 const AddNewFamily = () => {
   const [familyName, setFamilyName] = useState('');

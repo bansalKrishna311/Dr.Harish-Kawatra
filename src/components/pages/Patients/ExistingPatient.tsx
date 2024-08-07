@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import SelectGroupOne from '../Forms/SelectGroup/SelectGroupOne'; // Make sure this import path is correct
-import SelectGroupTwo from '../Forms/SelectGroup/SelectGroupTwo';
+import SelectGroupOne from '../../SelectGroup/SelectGroupOne'; // Make sure this import path is correct
+import SelectGroupTwo from '../../SelectGroup/SelectGroupTwo';
 
 const ExistingPatient = () => {
   const [symptoms, setSymptoms] = useState<string[]>(['']);
