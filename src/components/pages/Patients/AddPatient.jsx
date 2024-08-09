@@ -82,7 +82,7 @@ const AddPatient = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-9 ">
+    <div className="grid grid-cols-1 gap-9 lg:grid-cols-2">
       <div className="flex flex-col gap-9">
         {/* Add New Patient Form */}
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -442,3 +442,4 @@ const AddPatient = () => {
 };
 
 export default AddPatient;
+  

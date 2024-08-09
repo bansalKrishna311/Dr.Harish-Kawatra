@@ -42,6 +42,10 @@ const PatientSchema = new mongoose.Schema({
       }
     }
   ],
+  remarks:{
+    type: String,
+    default: ''
+  },
   pdisease: [
     {
       ill: {
@@ -60,6 +64,10 @@ const PatientSchema = new mongoose.Schema({
   ],
   
   pdetected: {
+    type: String,
+    default: ''
+  },
+  premarks:{
     type: String,
     default: ''
   },
