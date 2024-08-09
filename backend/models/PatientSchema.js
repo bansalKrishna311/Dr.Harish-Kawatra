@@ -1,4 +1,6 @@
+// PatientSchema.js
 const mongoose = require('mongoose');
+
 const PatientSchema = new mongoose.Schema({
   id: {
     type: String,
@@ -9,16 +11,16 @@ const PatientSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  gender:{
+  gender: {
     type: String,
     required: true,
-    default:['Male','Female','Other']
+    enum: ['Male', 'Female', 'Other']
   },
   age: {
     type: String,
     required: true
   },
- symptoms: {
+  symptoms: {
     type: [String],
     default: []
   },
@@ -42,7 +44,7 @@ const PatientSchema = new mongoose.Schema({
       }
     }
   ],
-  remarks:{
+  remarks: {
     type: String,
     default: ''
   },
@@ -62,12 +64,11 @@ const PatientSchema = new mongoose.Schema({
       }
     }
   ],
-  
   pdetected: {
     type: String,
     default: ''
   },
-  premarks:{
+  premarks: {
     type: String,
     default: ''
   },
@@ -75,7 +76,7 @@ const PatientSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  craeted_at: {
+  created_at: {
     type: Date,
     default: Date.now
   },

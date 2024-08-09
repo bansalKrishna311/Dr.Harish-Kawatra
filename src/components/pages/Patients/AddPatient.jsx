@@ -1,84 +1,75 @@
-import { useState, useEffect } from 'react';
-import SelectGroupOne from '../../SelectGroup/SelectGroupOne'; // Make sure this import path is correct
-import axios from 'axios';
+import { useState } from 'react';
+import SelectGroupOne from '../../SelectGroup/SelectGroupOne'; // Ensure this import path is correct
 
 const AddPatient = () => {
+  const [patients, setPatients] = useState([]); // Array to hold all patients
   const [formData, setFormData] = useState({
-    id: '', // Will be generated automatically
     name: '',
-    gender: '',
     age: '',
-    cdate: '', // For date of birth
+    gender: '',
+    dob: '',
     symptoms: [''],
-    disease: [''],
-    medicine: [''],
-    pdisease: [''],
-    pmedicine: [''],
-    pdetected: '',
-    lab_report: '',
-    remarks: '',
+    diseases: [''],
+    medicines: [''],
     historyDiseases: [''],
     historyMedicines: [''],
-    historyRemarks: ''
+    historyRemarks: '',
+    labReport: null, // Lab report file
   });
 
-  useEffect(() => {
-    // Fetch the latest patient ID from the backend and increment it
-    const fetchLatestPatientID = async () => {
-      try {
-        const response = await axios.get('/api/patients/latest-id');
-        const latestID = response.data.latestID || 0;
-        setFormData((prev) => ({
-          ...prev,
-          id: latestID + 1
-        }));
-      } catch (error) {
-        console.error('Error fetching the latest patient ID:', error);
-      }
-    };
-
-    fetchLatestPatientID();
-  }, []);
-
-  const handleChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value
+  const handleAddField = (key) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [key]: [...prevData[key], ''],
     }));
   };
 
-  const handleNestedChange = (field, index, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: prev[field].map((item, i) => (i === index ? value : item))
+  const handleRemoveField = (key, index) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [key]: prevData[key].filter((_, i) => i !== index),
     }));
   };
 
-  const handleAddField = (field) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: [...prev[field], '']
+  const handleChange = (key, index, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [key]: prevData[key].map((item, i) => (i === index ? value : item)),
     }));
   };
 
-  const handleRemoveField = (field, index) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: prev[field].filter((_, i) => i !== index)
+  const handleInputChange = (key, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [key]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Submit the formData to the backend
-    axios.post('/api/patients', formData)
-      .then((response) => {
-        console.log('Patient added successfully:', response.data);
-        // Reset the form or redirect the user
-      })
-      .catch((error) => {
-        console.error('Error adding patient:', error);
-      });
+  const handleFileChange = (event) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      labReport: event.target.files[0],
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setPatients((prevPatients) => [...prevPatients, formData]);
+    console.log(formData)
+    // Reset the form
+    setFormData({
+      name: '',
+      age: '',
+      gender: '',
+      dob: '',
+      symptoms: [''],
+      diseases: [''],
+      medicines: [''],
+      historyDiseases: [''],
+      historyMedicines: [''],
+      historyRemarks: '',
+      labReport: null,
+    });
   };
 
   return (
@@ -93,7 +84,7 @@ const AddPatient = () => {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="p-6.5">
-              {/* Name */}
+              {/* Existing Fields */}
               <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                 <div className="w-full ">
                   <label className="mb-2.5 block text-black dark:text-white">
@@ -101,53 +92,50 @@ const AddPatient = () => {
                   </label>
                   <input
                     type="text"
-                    value={formData.name}
-                    onChange={(e) => handleChange('name', e.target.value)}
                     placeholder="First name"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
                 </div>
               </div>
 
-              {/* Age */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Age
                 </label>
                 <input
                   type="text"
-                  value={formData.age}
-                  onChange={(e) => handleChange('age', e.target.value)}
                   placeholder="Age"
+                  value={formData.age}
+                  onChange={(e) => handleInputChange('age', e.target.value)}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
 
-              {/* Gender */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Gender
                 </label>
                 <SelectGroupOne
                   value={formData.gender}
-                  onChange={(value) => handleChange('gender', value)}
+                  onChange={(value) => handleInputChange('gender', value)}
                 />
               </div>
 
-              {/* Date of Birth */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Date of Birth
                 </label>
                 <input
                   type="date"
-                  value={formData.cdate}
-                  onChange={(e) => handleChange('cdate', e.target.value)}
+                  value={formData.dob}
+                  onChange={(e) => handleInputChange('dob', e.target.value)}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
 
-              {/* Dynamic Fields for Symptoms */}
+              {/* Dynamic Input Fields for Symptoms */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Symptoms
@@ -157,7 +145,7 @@ const AddPatient = () => {
                     <input
                       type="text"
                       value={symptom}
-                      onChange={(e) => handleNestedChange('symptoms', index, e.target.value)}
+                      onChange={(e) => handleChange('symptoms', index, e.target.value)}
                       placeholder="Symptom"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
@@ -179,23 +167,23 @@ const AddPatient = () => {
                 </button>
               </div>
 
-              {/* Dynamic Fields for Diseases */}
+              {/* Dynamic Input Fields for Diseases */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Diseases
                 </label>
-                {formData.disease.map((disease, index) => (
+                {formData.diseases.map((disease, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
                       type="text"
                       value={disease}
-                      onChange={(e) => handleNestedChange('disease', index, e.target.value)}
+                      onChange={(e) => handleChange('diseases', index, e.target.value)}
                       placeholder="Disease"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                     <button
                       type="button"
-                      onClick={() => handleRemoveField('disease', index)}
+                      onClick={() => handleRemoveField('diseases', index)}
                       className="ml-2 text-red-600 hover:text-red-700"
                     >
                       &times;
@@ -204,30 +192,30 @@ const AddPatient = () => {
                 ))}
                 <button
                   type="button"
-                  onClick={() => handleAddField('disease')}
+                  onClick={() => handleAddField('diseases')}
                   className="text-primary hover:underline"
                 >
                   + Add Disease
                 </button>
               </div>
 
-              {/* Dynamic Fields for Medicines */}
+              {/* Dynamic Input Fields for Medicines */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Medicines
                 </label>
-                {formData.medicine.map((medicine, index) => (
+                {formData.medicines.map((medicine, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
                       type="text"
                       value={medicine}
-                      onChange={(e) => handleNestedChange('medicine', index, e.target.value)}
+                      onChange={(e) => handleChange('medicines', index, e.target.value)}
                       placeholder="Medicine"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                     <button
                       type="button"
-                      onClick={() => handleRemoveField('medicine', index)}
+                      onClick={() => handleRemoveField('medicines', index)}
                       className="ml-2 text-red-600 hover:text-red-700"
                     >
                       &times;
@@ -236,119 +224,14 @@ const AddPatient = () => {
                 ))}
                 <button
                   type="button"
-                  onClick={() => handleAddField('medicine')}
+                  onClick={() => handleAddField('medicines')}
                   className="text-primary hover:underline"
                 >
                   + Add Medicine
                 </button>
               </div>
 
-              {/* Dynamic Fields for Past Diseases */}
-              <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Past Diseases
-                </label>
-                {formData.pdisease.map((pdisease, index) => (
-                  <div key={index} className="flex items-center mb-2">
-                    <input
-                      type="text"
-                      value={pdisease}
-                      onChange={(e) => handleNestedChange('pdisease', index, e.target.value)}
-                      placeholder="Past Disease"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveField('pdisease', index)}
-                      className="ml-2 text-red-600 hover:text-red-700"
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => handleAddField('pdisease')}
-                  className="text-primary hover:underline"
-                >
-                  + Add Past Disease
-                </button>
-              </div>
-
-              {/* Dynamic Fields for Past Medicines */}
-              <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Past Medicines
-                </label>
-                {formData.pmedicine.map((pmedicine, index) => (
-                  <div key={index} className="flex items-center mb-2">
-                    <input
-                      type="text"
-                      value={pmedicine}
-                      onChange={(e) => handleNestedChange('pmedicine', index, e.target.value)}
-                      placeholder="Past Medicine"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveField('pmedicine', index)}
-                      className="ml-2 text-red-600 hover:text-red-700"
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => handleAddField('pmedicine')}
-                  className="text-primary hover:underline"
-                >
-                  + Add Past Medicine
-                </button>
-              </div>
-
-              {/* Past Detection Date */}
-              <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Past Detection Date
-                </label>
-                <input
-                  type="date"
-                  value={formData.pdetected}
-                  onChange={(e) => handleChange('pdetected', e.target.value)}
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
-
-              {/* Lab Report */}
-              <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Lab Report
-                </label>
-                <input
-                  type="text"
-                  value={formData.lab_report}
-                  onChange={(e) => handleChange('lab_report', e.target.value)}
-                  placeholder="Lab Report"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
-
-              {/* Remarks */}
-              <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Remarks
-                </label>
-                <input
-                  type="text"
-                  value={formData.remarks}
-                  onChange={(e) => handleChange('remarks', e.target.value)}
-                  placeholder="Remarks"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
-
-              {/* Dynamic Fields for History Diseases */}
+              {/* History Diseases */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   History Diseases
@@ -358,8 +241,8 @@ const AddPatient = () => {
                     <input
                       type="text"
                       value={historyDisease}
-                      onChange={(e) => handleNestedChange('historyDiseases', index, e.target.value)}
-                      placeholder="History Disease"
+                      onChange={(e) => handleChange('historyDiseases', index, e.target.value)}
+                      placeholder="Past Disease"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                     <button
@@ -380,7 +263,7 @@ const AddPatient = () => {
                 </button>
               </div>
 
-              {/* Dynamic Fields for History Medicines */}
+              {/* History Medicines */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   History Medicines
@@ -390,8 +273,8 @@ const AddPatient = () => {
                     <input
                       type="text"
                       value={historyMedicine}
-                      onChange={(e) => handleNestedChange('historyMedicines', index, e.target.value)}
-                      placeholder="History Medicine"
+                      onChange={(e) => handleChange('historyMedicines', index, e.target.value)}
+                      placeholder="Past Medicine"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                     <button
@@ -417,21 +300,56 @@ const AddPatient = () => {
                 <label className="mb-2.5 block text-black dark:text-white">
                   History Remarks
                 </label>
-                <input
-                  type="text"
+                <textarea
                   value={formData.historyRemarks}
-                  onChange={(e) => handleChange('historyRemarks', e.target.value)}
-                  placeholder="History Remarks"
+                  onChange={(e) => handleInputChange('historyRemarks', e.target.value)}
+                  placeholder="Past Disease / Medicine Detection"
+                  rows="6"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
+                ></textarea>
               </div>
 
-              {/* Submit Button */}
+              {/* Lab Report Upload */}
+              <div className="mb-6">
+                <label className="mb-5 block text-black dark:text-white">
+                  Upload Lab Report (jpg, png, pdf)
+                </label>
+                <div className="relative mb-4.5 h-[250px] rounded-md border border-dashed border-primary bg-gray-100 dark:bg-[#212835]">
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="absolute top-0 left-0 h-full w-full cursor-pointer opacity-0"
+                  />
+                  <div className="flex h-full w-full items-center justify-center px-4 text-center">
+                    <div>
+                      <span className="mx-auto mb-2.5 flex h-14 w-14 items-center justify-center rounded-full bg-primary">
+                        <svg
+                          className="fill-white"
+                          width="40"
+                          height="40"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M7 16V8a4 4 0 0 1 8 0v8" />
+                          <line x1="12" y1="12" x2="12" y2="12" />
+                          <path d="M7 16l-2 2m0 0l-2-2m2 2V8" />
+                        </svg>
+                      </span>
+                      <p className="mt-2">Drop your file here or select to upload</p>
+                      <p className="mt-1.5 text-sm">jpg, png, pdf</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <button
                 type="submit"
-                className="w-full rounded bg-primary p-3 text-white transition hover:bg-opacity-90"
+                className="mt-6 w-full rounded bg-primary p-3 text-white hover:bg-opacity-90"
               >
-                Add Patient
+                Save
               </button>
             </div>
           </form>
@@ -442,4 +360,3 @@ const AddPatient = () => {
 };
 
 export default AddPatient;
-  
