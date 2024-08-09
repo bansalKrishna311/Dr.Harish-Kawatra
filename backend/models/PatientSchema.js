@@ -9,6 +9,11 @@ const PatientSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  gender:{
+    type: String,
+    required: true,
+    default:['Male','Female','Other']
+  },
   age: {
     type: String,
     required: true
@@ -62,7 +67,7 @@ const PatientSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  created_at: {
+  craeted_at: {
     type: Date,
     default: Date.now
   },
