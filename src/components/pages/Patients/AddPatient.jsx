@@ -1,22 +1,10 @@
 import { useState } from 'react';
 import SelectGroupOne from '../../SelectGroup/SelectGroupOne'; // Ensure this import path is correct
+import { useContext } from 'react';
+import { UserContext } from '../../../App';
 
 const AddPatient = () => {
-  const [patients, setPatients] = useState([]); // Array to hold all patients
-  const [formData, setFormData] = useState({
-    name: '',
-    age: '',
-    gender: '',
-    dob: '',
-    symptoms: [''],
-    diseases: [''],
-    medicines: [''],
-    historyDiseases: [''],
-    historyMedicines: [''],
-    historyRemarks: '',
-    labReport: null, // Lab report file
-  });
-
+  const { user, formData, setFormData,patients,setPatients } = useContext(UserContext);
   const handleAddField = (key) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -43,6 +31,7 @@ const AddPatient = () => {
       ...prevData,
       [key]: value,
     }));
+    console.log(formData)
   };
 
   const handleFileChange = (event) => {
@@ -65,6 +54,7 @@ const AddPatient = () => {
       symptoms: [''],
       diseases: [''],
       medicines: [''],
+      remarks: '',
       historyDiseases: [''],
       historyMedicines: [''],
       historyRemarks: '',
@@ -230,6 +220,18 @@ const AddPatient = () => {
                   + Add Medicine
                 </button>
               </div>
+              <div className="mb-4.5">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Remarks
+                </label>
+                <input
+                  type="text"
+                  placeholder="remarks"
+                  value={formData.remarks}
+                  onChange={(e) => handleInputChange('remarks', e.target.value)}
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                />
+              </div>
 
               {/* History Diseases */}
               <div className="mb-4.5">
@@ -310,7 +312,7 @@ const AddPatient = () => {
               </div>
 
               {/* Lab Report Upload */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <label className="mb-5 block text-black dark:text-white">
                   Upload Lab Report (jpg, png, pdf)
                 </label>
@@ -343,7 +345,7 @@ const AddPatient = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <button
                 type="submit"

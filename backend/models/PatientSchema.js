@@ -64,6 +64,15 @@ const PatientSchema = new mongoose.Schema({
       }
     }
   ],
+  
+  historyDiseases: {
+    type: [String],
+    default: []
+  },
+  historyMedicines: {
+    type: [String],
+    default: []
+  },
   pdetected: {
     type: String,
     default: ''
