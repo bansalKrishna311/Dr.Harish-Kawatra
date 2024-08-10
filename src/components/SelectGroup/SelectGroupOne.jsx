@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-
-const SelectGroupOne: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState<string>('');
-  const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-
+import { useState } from 'react';
+import { useContext } from 'react';
+import {UserContext} from '../../App'
+const SelectGroupOne = () => {
+ 
+  const [isOptionSelected, setIsOptionSelected] = useState(false);
+  const { selectedOption, setSelectedOption } = useContext(UserContext);
   const changeTextColor = () => {
     setIsOptionSelected(true);
   };
@@ -11,8 +12,7 @@ const SelectGroupOne: React.FC = () => {
   return (
     <div className="mb-4.5">
       <label className="mb-2.5 block text-black dark:text-white">
-        {' '}
-      
+        {/* Label text can be added here */}
       </label>
 
       <div className="relative z-20 bg-transparent dark:bg-form-input">
@@ -27,15 +27,15 @@ const SelectGroupOne: React.FC = () => {
           }`}
         >
           <option value="" disabled className="text-body dark:text-bodydark">
-           Gender
+            Gender
           </option>
-          <option value="USA" className="text-body dark:text-bodydark">
+          <option value="Male" className="text-body dark:text-bodydark">
             Male
           </option>
-          <option value="UK" className="text-body dark:text-bodydark">
+          <option value="Female" className="text-body dark:text-bodydark">
             Female
           </option>
-          <option value="Canada" className="text-body dark:text-bodydark">
+          <option value="Other" className="text-body dark:text-bodydark">
             Other
           </option>
         </select>

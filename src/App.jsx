@@ -31,6 +31,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const { pathname } = useLocation();
+
+  const [selectedOption, setSelectedOption] = useState('');
   const [patients, setPatients] = useState([]); // Array to hold all patients
   const [formData, setFormData] = useState({
     name: '',
@@ -40,10 +42,11 @@ function App() {
     symptoms: [''],
     diseases: [''],
     medicines: [''],
+    remarks: '',
     historyDiseases: [''],
     historyMedicines: [''],
     historyRemarks: '',
-    labReport: null, // Lab report file
+    labReport: null,
   });
   const handleLogin = (userData) => {
     setUser(userData);
@@ -60,7 +63,7 @@ function App() {
   return loading ? (
     <Loader />
   ) : (
-    <UserContext.Provider value={{ user, handleLogin,formData,setFormData,setPatients,patients }}>
+    <UserContext.Provider value={{ user, handleLogin,formData,setFormData,setPatients,patients,selectedOption, setSelectedOption }}>
       <Routes>
         {/* Home Route */}
         <Route

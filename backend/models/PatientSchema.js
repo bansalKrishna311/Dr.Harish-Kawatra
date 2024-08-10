@@ -14,7 +14,6 @@ const PatientSchema = new mongoose.Schema({
   gender: {
     type: String,
     required: true,
-    enum: ['Male', 'Female', 'Other']
   },
   age: {
     type: String,
@@ -64,7 +63,8 @@ const PatientSchema = new mongoose.Schema({
       }
     }
   ],
-  
+
+// new added
   historyDiseases: {
     type: [String],
     default: []
@@ -73,14 +73,17 @@ const PatientSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  historyRemarks: {
+    type: String,
+    default: ''
+  },
+  // tilll here
+
   pdetected: {
     type: String,
     default: ''
   },
-  premarks: {
-    type: String,
-    default: ''
-  },
+
   lab_report: {
     type: String,
     default: ''
