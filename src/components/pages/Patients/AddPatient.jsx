@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import {UserContext} from '../../../App';
 
 const AddPatient = () => {
-  const { user, formData, setFormData,patients,setPatients} = useContext(UserContext);
+  const { user, formData, setFormData,patients,setPatients,handleSubmit} = useContext(UserContext);
   const handleAddField = (key) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -40,30 +40,10 @@ const AddPatient = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setPatients((prevPatients) => [...prevPatients, formData]);
-    console.log(formData)
-    // Reset the form
-    setFormData({
-      name: '',
-      age: '',
-      gender: '',
-      dob: '',
-      symptoms: [''],
-      diseases: [''],
-      medicines: [''],
-      remarks: '',
-      historyDiseases: [''],
-      historyMedicines: [''],
-      historyRemarks: '',
-      labReport: null,
-    });
-
-  };
+  
 
   return (
-    <div className="grid grid-cols-1 gap-9 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-9 ">
       <div className="flex flex-col gap-9">
         {/* Add New Patient Form */}
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -82,7 +62,7 @@ const AddPatient = () => {
                   </label>
                   <input
                     type="text"
-                    placeholder="First name"
+                    placeholder="Full name"
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
@@ -262,13 +242,13 @@ const AddPatient = () => {
                 <label className="mb-2.5 block text-black dark:text-white">
                   Remarks
                 </label>
-                <input
-                  type="text"
-                  placeholder="remarks"
+                <textarea
                   value={formData.remarks}
                   onChange={(e) => handleInputChange('remarks', e.target.value)}
+                  placeholder="remarks"
+                  rows="6"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
+                ></textarea>
               </div>
 
               {/* History Diseases */}

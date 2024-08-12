@@ -3,21 +3,18 @@ const mongoose = require('mongoose');
 
 const PatientSchema = new mongoose.Schema({
   id: {
-    type: String,
-    required: true,
-    unique: true
+    type: Number,
+    // required: true,
+    // unique: true
   },
   name: {
     type: String,
-    required: true
   },
   gender: {
     type: String,
-    required: true,
   },
   age: {
     type: String,
-    required: true
   },
   symptoms: {
     type: [String],
@@ -25,13 +22,12 @@ const PatientSchema = new mongoose.Schema({
   },
   cdate: {
     type: Date,
-    required: true
+
   },
   disease: [
     {
       ills: {
         type: String,
-        required: true
       }
     }
   ],
@@ -39,7 +35,7 @@ const PatientSchema = new mongoose.Schema({
     {
       meds: {
         type: String,
-        required: true
+      
       }
     }
   ],
@@ -65,6 +61,18 @@ const PatientSchema = new mongoose.Schema({
   ],
 
 // new added
+dob: {
+    type: Date,
+    default: ''
+  },
+  medicines: {
+    type: [String],
+    default: []
+  },
+  diseases: {
+    type: [String],
+    default: []
+  },
   historyDiseases: {
     type: [String],
     default: []
@@ -88,7 +96,7 @@ const PatientSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  created_at: {
+  craeted_at: {
     type: Date,
     default: Date.now
   },

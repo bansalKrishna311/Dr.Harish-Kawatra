@@ -1,6 +1,6 @@
 import { useEffect, useState, createContext } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-
+import axios from 'axios';
 import Loader from './components/pages/Loader';
 import PageTitle from './components/PageTitle';
 
@@ -32,9 +32,12 @@ function App() {
   const [user, setUser] = useState(null);
   const { pathname } = useLocation();
 
+   // Initialize id state
+   const [currentId, setCurrentId] = useState(1254);
   const [selectedOption, setSelectedOption] = useState('');
   const [patients, setPatients] = useState([]); // Array to hold all patients
   const [formData, setFormData] = useState({
+    id:12234,
     name: '',
     age: '',
     gender: '',
@@ -59,11 +62,65 @@ function App() {
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
+  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    
+    // Update formData with the current id
+    const updatedFormData = {
+      ...formData,
+      id: currentId,
+    };
+    console.log('Updated form data:', updatedFormData);
+    try {
+      // Send the data to the backend
+      const response = await axios.post('http://localhost:4000/api/v1/patients', updatedFormData);
+      console.log('Patient saved:', response.data);
+  
+      // Add new patient data to local state
+      setPatients((prevPatients) => [...prevPatients, response.data]);
+  
+      // Increment the id for the next patient
+      setCurrentId((prevId) => prevId + 1);
+  
+      // Reset the form
+      setFormData({
+        id: currentId + 1,  // Update the id to the next value for form reset
+        name: '',
+        age: '',
+        gender: '',
+        dob: '',
+        symptoms: [''],
+        diseases: [''],
+        medicines: [''],
+        remarks: '',
+        historyDiseases: [''],
+        historyMedicines: [''],
+        historyRemarks: '',
+        labReport: null,
+      });
+    } catch (error) {
+      console.error('Error saving patient:', error);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('Request data:', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', error.message);
+      }
+    }
+  };
 
   return loading ? (
     <Loader />
   ) : (
-    <UserContext.Provider value={{ user, handleLogin,formData,setFormData,setPatients,patients,selectedOption, setSelectedOption }}>
+    <UserContext.Provider value={{ user, handleLogin,formData,setFormData,setPatients,patients,selectedOption, setSelectedOption,handleSubmit }}>
       <Routes>
         {/* Home Route */}
         <Route
