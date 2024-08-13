@@ -1,55 +1,43 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { FcGoogle } from 'react-icons/fc';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const Signup = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-    });
-    const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-    console.log(formData);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    
-
-     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post(
-                'http://localhost:4000/api/v1/signup',
-                formData
-            );
-            if (response.status === 200) {
-                alert('Signup successful');
-            }
-        } catch (err) {
-            console.error(err);
-            if (err.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                toast.error(err.response.data.message || 'Signup failed');
-            } else if (err.request) {
-                // The request was made but no response was received
-                toast.error('No response from server');
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                toast.error('Error in signup request');
-            }
-        }
-    };
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:4000/api/v1/signup', formData);
+      if (response.status === 200) {
+        toast.success('Signup successful');
+        navigate('/');
+      }
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.message || 'Signup failed');
+      } else if (err.request) {
+        toast.error('No response from server');
+      } else {
+        toast.error('Error in signup request');
+      }
+    }
+  };
     return (
-        <div
-            className="h-[48.325rem]">
+        <div className="h-[48.325rem]">
             <div className="flex min-h-[80vh] flex-col justify-center py-12 sm:px-6 lg:px-8">
                 <div className="text-center sm:mx-auto sm:w-full sm:max-w-md">
                     <h1 className="text-3xl font-extrabold text-gray-900">
@@ -124,14 +112,13 @@ const Signup = () => {
                                     </span>
                                 </div>
                             </div>
-                            
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
                                     <input
                                         id="remember_me"
                                         name="remember_me"
                                         type="checkbox"
-                                        className="h-4 w-4 rounded border-gray-300  dark:text-white dark:border-gray-600 dark:focus:ring-indigo-400 dark:focus:ring-offset-2"
+                                        className="h-4 w-4 rounded border-gray-300 dark:text-white dark:border-gray-600 dark:focus:ring-indigo-400 dark:focus:ring-offset-2"
                                     />
                                     <label
                                         htmlFor="remember_me"
@@ -158,15 +145,10 @@ const Signup = () => {
                                 </button>
                             </div>
                         </form>
-                        <div className="mt-6">
-                      
-                    
+                        <div className="m-auto mt-6 w-fit md:mt-8">
+                            <span className="m-auto text-gray-500">Already have an account? <Link to="/" className="font-bold text-black underline">Login</Link></span>
+                        </div>
                     </div>
-                    <div className="m-auto mt-6 w-fit md:mt-8">
-                        <span className="m-auto text-gray-500">Already have an account? <Link to="/" className="font-bold text-black underline">Login</Link></span>
-                    </div>
-                    </div>
-                    
                 </div>
             </div>
         </div>
