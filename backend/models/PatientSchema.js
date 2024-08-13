@@ -61,7 +61,7 @@ const PatientSchema = new mongoose.Schema({
   ],
 
 // new added
-dob: {
+date: {
     type: Date,
     default: ''
   },
