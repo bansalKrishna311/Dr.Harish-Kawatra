@@ -5,14 +5,11 @@ import Loader from './components/pages/Loader';
 import PageTitle from './components/PageTitle';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// Import pages for Patients and Families
 import AddPatient from './components/pages/Patients/AddPatient';
 import ExistingPatient from './components/pages/Patients/ExistingPatient';
 import PatientList from './components/pages/Patients/PatientList';
 import AddNewFamily from './components/pages/Families/AddNewFamily';
 import FamilyList from './components/pages/Families/FamilyList';
-
 import DefaultLayout from './layout/DefaultLayout';
 import PatientRecords from './components/pages/Patients/PatientsRecords';
 import FamilyRecords from './components/pages/Families/familyRecords';
