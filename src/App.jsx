@@ -12,7 +12,7 @@ import AddNewFamily from './components/pages/Families/AddNewFamily';
 import FamilyList from './components/pages/Families/FamilyList';
 import DefaultLayout from './layout/DefaultLayout';
 import PatientRecords from './components/pages/Patients/PatientsRecords';
-import FamilyRecords from './components/pages/Families/familyRecords';
+import FamilyRecords from './components/pages/Families/FamilyRecords.tsx';
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
 import Home from './components/pages/Home/Home';
