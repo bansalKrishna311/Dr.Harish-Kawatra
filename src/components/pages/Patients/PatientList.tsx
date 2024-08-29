@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Select from 'react-select';
 
 // Define the patient data type
 type Patient = {
@@ -11,12 +12,23 @@ type Patient = {
   gender: string;
 };
 
-const families = ['Family A', 'Family B', 'Family C'];
+// Define the family options type
+type FamilyOption = {
+  value: string;
+  label: string;
+};
+
+const families: FamilyOption[] = [
+  { value: 'Family A', label: 'Family A' },
+  { value: 'Family B', label: 'Family B' },
+  { value: 'Family C', label: 'Family C' },
+];
 
 const PatientList = () => {
   const navigate = useNavigate();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [selectedFamilies, setSelectedFamilies] = useState<Record<string, string>>({});
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch patients from the backend
   useEffect(() => {
@@ -33,15 +45,42 @@ const PatientList = () => {
   }, []);
 
   // Handle change in dropdown for each patient
-  const handleFamilyChange = (patientId: string, event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFamilyChange = (patientId: string, selectedOption: any) => {
     setSelectedFamilies({
       ...selectedFamilies,
-      [patientId]: event.target.value,
+      [patientId]: selectedOption ? selectedOption.value : '',
     });
   };
 
+  // Handle delete patient
+  const handleDelete = async (patientId: string) => {
+    try {
+      await axios.delete(`http://localhost:4000/api/v1/patients/${patientId}`);
+      setPatients(patients.filter(patient => patient._id !== patientId));
+    } catch (error) {
+      console.error('Error deleting patient:', error);
+    }
+  };
+
+  // Handle search input
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+
+  // Filter patients based on search term
+  const filteredPatients = patients.filter(patient =>
+    patient.name.toLowerCase().includes(searchTerm)
+  );
+
   return (
-    <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <div className="w-full rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={searchTerm}
+        onChange={handleSearch}
+        className="mb-4 p-2 border rounded-md dark:border-form-strokedark dark:bg-form-input dark:text-white w-full"
+      />
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
@@ -61,7 +100,7 @@ const PatientList = () => {
             </tr>
           </thead>
           <tbody>
-            {patients.map((patient, index) => (
+            {filteredPatients.map((patient, index) => (
               <tr key={patient._id}>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
@@ -77,42 +116,40 @@ const PatientList = () => {
                   <div className="flex items-center space-x-3">
                     {/* Edit Icon */}
                     <button
-  aria-label="Edit"
-  className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
-  onClick={() => navigate(`/patients/${patient._id}/edit`)}
->
-  <FaEdit className="w-4 h-4" />
-</button>
+                      aria-label="Edit"
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => navigate(`/patients/${patient._id}/edit`)}
+                    >
+                      <FaEdit className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                    </button>
                     {/* Delete Icon */}
                     <button
                       aria-label="Delete"
-                      className="bg-red-500 hover:bg-red-700 text-white p-1 rounded"
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => handleDelete(patient._id)}
                     >
-                      <FaTrash className="w-4 h-4" />
+                      <FaTrash className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </button>
                     {/* View Icon */}
                     <button
                       aria-label="View"
-                      className="bg-yellow-500 hover:bg-yellow-700 text-white p-1 rounded"
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
                       onClick={() => navigate(`/patients/${patient._id}/records`)}
                     >
-                      <FaEye className="w-4 h-4" />
+                      <FaEye className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </button>
                   </div>
                 </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <select
-                    value={selectedFamilies[patient._id] || ''}
-                    onChange={(e) => handleFamilyChange(patient._id, e)}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  >
-                    <option value="">Select a family</option>
-                    {families.map((family, index) => (
-                      <option key={index} value={family}>
-                        {family}
-                      </option>
-                    ))}
-                  </select>
+                <td className="border-b border-[#eee] py-5 px-4  dark:border-strokedark">
+                  <Select
+                    options={families}
+                    value={families.find(family => family.value === selectedFamilies[patient._id]) || null}
+                    onChange={(option) => handleFamilyChange(patient._id, option)}
+                    className="w-full dark:border-strokedark  "
+                    classNamePrefix="react-select"
+                    isClearable
+                    placeholder="Select a family"
+                  />
                 </td>
               </tr>
             ))}

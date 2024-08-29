@@ -188,7 +188,7 @@ function App() {
           }
         />
         <Route
-          path="/patients/patient-records"
+          path="/patients/records"
           element={
             <DefaultLayout>
               <PageTitle title="Patient's Records | All Visits" />

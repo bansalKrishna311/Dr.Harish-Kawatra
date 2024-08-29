@@ -1,16 +1,16 @@
-import { FaEdit } from 'react-icons/fa';
 import React from 'react';
+import { FaEdit } from 'react-icons/fa';
 
-// Define the patient data type
-type Patient = {
+// Define the patient visit data type
+type PatientVisit = {
   patientID: number;
   patientName: string;
   diseaseName: string;
   date: string;
 };
 
-// Sample patient data
-const patientData: Patient[] = [
+// Sample patient visit data
+const patientData: PatientVisit[] = [
   { patientID: 378, patientName: 'MRS. PUJA KONDAL', diseaseName: '', date: '2022-08-23' },
   { patientID: 378, patientName: 'MRS. PUJA KONDAL', diseaseName: '', date: '2022-08-31' },
   { patientID: 378, patientName: 'MRS. PUJA KONDAL', diseaseName: 'COUGH, COLD, FEVER', date: '2022-09-08' },
@@ -23,7 +23,7 @@ const PatientsRecords = () => {
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="py-4 px-4 font-medium text-black dark:text-white">PatientID</th>
+              <th className="py-4 px-4 font-medium text-black dark:text-white">Patient ID</th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">Patient Name</th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">Disease Name</th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">Date</th>
@@ -39,7 +39,10 @@ const PatientsRecords = () => {
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">{patient.date}</td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3">
-                    <button aria-label="Edit" className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded">
+                    <button
+                      aria-label="Edit"
+                      className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
+                    >
                       <FaEdit className="w-4 h-4" />
                     </button>
                   </div>
