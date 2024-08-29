@@ -1,11 +1,10 @@
-// PatientSchema.js
 const mongoose = require('mongoose');
 
 const PatientSchema = new mongoose.Schema({
   id: {
     type: Number,
-    // required: true,
-    // unique: true
+    unique: true,  // Ensure IDs are unique
+    required: true
   },
   name: {
     type: String,
@@ -22,7 +21,6 @@ const PatientSchema = new mongoose.Schema({
   },
   cdate: {
     type: Date,
-
   },
   disease: [
     {
@@ -35,7 +33,6 @@ const PatientSchema = new mongoose.Schema({
     {
       meds: {
         type: String,
-      
       }
     }
   ],
@@ -59,9 +56,7 @@ const PatientSchema = new mongoose.Schema({
       }
     }
   ],
-
-// new added
-date: {
+  date: {
     type: Date,
     default: ''
   },
@@ -85,25 +80,14 @@ date: {
     type: String,
     default: ''
   },
-  // tilll here
-
   pdetected: {
     type: String,
     default: ''
   },
-
   lab_report: {
     type: String,
     default: ''
   },
-  craeted_at: {
-    type: Date,
-    default: Date.now
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now
-  }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Patient', PatientSchema);

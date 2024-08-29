@@ -1,18 +1,21 @@
-// controllers/patientController.js
 const Patient = require('../models/PatientSchema');
 
 // Add a new patient
 const addPatient = async (req, res) => {
   try {
-    const { id, name, age, gender, dob, symptoms, diseases, medicines, remarks, historyDiseases, historyMedicines, historyRemarks } = req.body;
+    const { name, age, gender, date, symptoms, diseases, medicines, remarks, historyDiseases, historyMedicines, historyRemarks } = req.body;
+
+    // Find the highest current ID
+    const lastPatient = await Patient.findOne().sort({ id: -1 });
+    const nextId = lastPatient ? lastPatient.id + 1 : 1;
 
     // Create a new patient instance
     const newPatient = new Patient({
-      id,
+      id: nextId,
       name,
       age,
       gender,
-      dob,
+      date,
       symptoms,
       diseases,
       medicines,
@@ -27,6 +30,7 @@ const addPatient = async (req, res) => {
 
     res.status(200).json(savedPatient);
   } catch (error) {
+    console.error('Error adding patient:', error);
     res.status(500).json({ message: 'Failed to add patient', error });
   }
 };
@@ -41,7 +45,19 @@ const getPatients = async (req, res) => {
   }
 };
 
+// Delete a patient by ID
+const deletePatient = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Patient.findOneAndDelete({ id: parseInt(id) });  // Use `findOneAndDelete` with `id` field
+    res.status(200).json({ message: 'Patient deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to delete patient', error });
+  }
+};
+
 module.exports = {
   addPatient,
   getPatients,
+  deletePatient,
 };

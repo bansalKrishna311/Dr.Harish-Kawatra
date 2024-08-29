@@ -1,12 +1,14 @@
-// routes/patientRoutes.js
 const express = require('express');
 const router = express.Router();
-const { addPatient, getPatients } = require('../controllers/patientdetails');
+const { addPatient, getPatients, deletePatient } = require('../controllers/patientdetails');  // Ensure correct import
 
-// POST /api/patients
+// POST /api/v1/patients
 router.post('/patients', addPatient);
 
-// GET /api/patients (if you need to fetch all patients)
-router.get('/', getPatients);
+// GET /api/v1/patients
+router.get('/patients', getPatients);
+
+// DELETE /api/v1/patients/:id
+router.delete('/patients/:id', deletePatient);
 
 module.exports = router;

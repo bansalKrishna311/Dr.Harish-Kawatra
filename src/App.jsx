@@ -179,7 +179,7 @@ function App() {
           }
         />
         <Route
-          path="/patients/list"
+          path="/patients"
           element={
             <DefaultLayout>
               <PageTitle title="Patients List | Your Application" />
