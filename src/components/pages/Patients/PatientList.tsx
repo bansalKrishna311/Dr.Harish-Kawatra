@@ -77,11 +77,12 @@ const PatientList = () => {
                   <div className="flex items-center space-x-3">
                     {/* Edit Icon */}
                     <button
-                      aria-label="Edit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
-                    >
-                      <FaEdit className="w-4 h-4" />
-                    </button>
+  aria-label="Edit"
+  className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
+  onClick={() => navigate(`/patients/${patient._id}/edit`)}
+>
+  <FaEdit className="w-4 h-4" />
+</button>
                     {/* Delete Icon */}
                     <button
                       aria-label="Delete"

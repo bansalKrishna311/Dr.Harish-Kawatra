@@ -71,7 +71,7 @@ function App() {
     console.log('Updated form data:', updatedFormData);
     try {
       // Send the data to the backend
-      const response = await axios.post('http://localhost:4000/api/v1/patients', updatedFormData);
+      const response =await axios.post('http://localhost:4000/api/v1/patients', updatedFormData);
       console.log('Patient saved:', response.data);
 
       // Add new patient data to local state
@@ -170,7 +170,7 @@ function App() {
           }
         />
         <Route
-          path="/patients/add-existing"
+          path="/patients/:id/edit"
           element={
             <DefaultLayout>
               <PageTitle title="Add Existing Patient | Your Application" />

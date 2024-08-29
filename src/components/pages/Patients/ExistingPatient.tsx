@@ -1,12 +1,47 @@
-import { useState } from 'react';
-import SelectGroupOne from '../../SelectGroup/SelectGroupOne'; // Make sure this import path is correct
-import SelectGroupTwo from '../../SelectGroup/SelectGroupTwo';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import SelectGroupOne from '../../SelectGroup/SelectGroupOne';
+
+interface Patient {
+  name: string;
+  age: string;
+  gender: string;
+  date: string;
+  symptoms: string[];
+  diseases: string[];
+  medicines: string[];
+  remarks: string;
+}
 
 const ExistingPatient = () => {
-  const [symptoms, setSymptoms] = useState<string[]>(['']);
-  const [diseases, setDiseases] = useState<string[]>(['']);
-  const [medicines, setMedicines] = useState<string[]>(['']);
+  const { id } = useParams<{ id: string }>(); // Capture the ID from the URL
+  const navigate = useNavigate();
+  const [patient, setPatient] = useState<Patient | null>(null); // State to hold the patient data
+  const [symptoms, setSymptoms] = useState<string[]>([]);
+  const [diseases, setDiseases] = useState<string[]>([]);
+  const [medicines, setMedicines] = useState<string[]>([]);
 
+  // Fetch patient data by ID
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/api/v1/patients/${id}`);
+        setPatient(response.data);
+        setSymptoms(response.data.symptoms || []);
+        setDiseases(response.data.diseases || []);
+        setMedicines(response.data.medicines || []);
+      } catch (error) {
+        console.error('Error fetching patient:', error);
+      }
+    };
+
+    if (id) {
+      fetchPatient();
+    }
+  }, [id]);
+
+  // Handle add, remove, and change for dynamic input fields
   const handleAddField = (setter: React.Dispatch<React.SetStateAction<string[]>>) => {
     setter(prev => [...prev, '']);
   };
@@ -19,20 +54,54 @@ const ExistingPatient = () => {
     setter(prev => prev.map((item, i) => (i === index ? value : item)));
   };
 
+  // Handle form submission (for updating the patient)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!patient) return; // Exit if patient data is not loaded
+
+    try {
+      const updatedPatient = {
+        ...patient,
+        symptoms,
+        diseases,
+        medicines,
+      };
+      await axios.put(`http://localhost:4000/api/v1/patients/${id}`, updatedPatient);
+      navigate('/patients'); // Redirect to the patients list after successful update
+    } catch (error) {
+      console.error('Error updating patient:', error);
+    }
+  };
+
+  if (!patient) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="grid grid-cols-1 gap-9">
       <div className="w-full">
-        {/* Add existing Patient Form */}
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">
-              Add Existing Patient
+              {id ? 'Edit Patient' : 'Add Existing Patient'}
             </h3>
           </div>
-          <form action="#">
+          <form onSubmit={handleSubmit}>
             <div className="p-6.5">
-              {/* Existing Fields */}
-              <SelectGroupTwo/>
+              {/* Removed SelectGroupTwo component */}
+
+              <div className="mb-4.5">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={patient.name}
+                  onChange={(e) => setPatient({ ...patient, name: e.target.value })}
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                />
+              </div>
 
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
@@ -41,6 +110,8 @@ const ExistingPatient = () => {
                 <input
                   type="text"
                   placeholder="Age"
+                  value={patient.age}
+                  onChange={(e) => setPatient({ ...patient, age: e.target.value })}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
@@ -49,7 +120,7 @@ const ExistingPatient = () => {
                 <label className="mb-2.5 block text-black dark:text-white">
                   Gender
                 </label>
-                <SelectGroupOne />
+                <SelectGroupOne value={patient.gender} onChange={(value) => setPatient({ ...patient, gender: value })} />
               </div>
 
               <div className="mb-4.5">
@@ -58,11 +129,12 @@ const ExistingPatient = () => {
                 </label>
                 <input
                   type="date"
+                  value={patient.date}
+                  onChange={(e) => setPatient({ ...patient, date: e.target.value })}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
 
-              {/* Dynamic Input Fields for Symptoms */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Symptoms
@@ -94,7 +166,6 @@ const ExistingPatient = () => {
                 </button>
               </div>
 
-              {/* Dynamic Input Fields for Diseases */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Diseases
@@ -126,7 +197,6 @@ const ExistingPatient = () => {
                 </button>
               </div>
 
-              {/* Dynamic Input Fields for Medicines */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Medicines
@@ -165,21 +235,17 @@ const ExistingPatient = () => {
                 <textarea
                   rows={6}
                   placeholder="Write any Remarks"
+                  value={patient.remarks}
+                  onChange={(e) => setPatient({ ...patient, remarks: e.target.value })}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                ></textarea>
-              </div>
-              <div className="mb-6">
-                <label className="mb-3 block text-black dark:text-white">
-                  Add Lab Reports
-                </label>
-                <input
-                  type="file"
-                  className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
                 />
               </div>
 
-              <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-white hover:bg-opacity-90 focus:outline-none">
-                Publish
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center rounded bg-primary py-2 px-4 font-medium text-white hover:bg-opacity-90"
+              >
+                Save Patient
               </button>
             </div>
           </form>
