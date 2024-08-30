@@ -29,7 +29,7 @@ function App() {
   const { pathname } = useLocation();
 
   // Initialize id state
-  const [currentId, setCurrentId] = useState(1254);
+  const [currentId, setCurrentId] = useState();
   const [selectedOption, setSelectedOption] = useState('');
   const [patients, setPatients] = useState([]); // Array to hold all patients
   const [formData, setFormData] = useState({
@@ -59,14 +59,24 @@ function App() {
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
+  function generateRandomId(length) {
+    let result = '';
+    const characters = '1234567890';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let newId=generateRandomId(6)
 
     // Update formData with the current id
     const updatedFormData = {
       ...formData,
-      id: currentId,
+      id: newId,
     };
     console.log('Updated form data:', updatedFormData);
     try {
