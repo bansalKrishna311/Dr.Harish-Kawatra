@@ -206,6 +206,15 @@ function App() {
             </DefaultLayout>
           }
         />
+        <Route
+          path="/patients/add-existing"
+          element={
+            <DefaultLayout>
+              <PageTitle title="Add Existing Patient | Your Application" />
+              <ExistingPatient />
+            </DefaultLayout>
+          }
+        />
         {/* Families Routes */}
         <Route
           path="/families/add-new"
