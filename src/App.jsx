@@ -12,7 +12,7 @@ import AddNewFamily from './components/pages/Families/AddNewFamily';
 import FamilyList from './components/pages/Families/FamilyList';
 import DefaultLayout from './layout/DefaultLayout';
 import PatientRecords from './components/pages/Patients/PatientsRecords';
-import FamilyRecords from './components/pages/Families/FamilyRecords.tsx';
+import FamilyRecords from './components/pages/Families/FamilyRecords';
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
 import Home from './components/pages/Home/Home';
@@ -208,7 +208,7 @@ function App() {
         />
         {/* Families Routes */}
         <Route
-          path="/families/add-new"
+          path="/families/new"
           element={
             <DefaultLayout>
               <PageTitle title="Add New Family | Your Application" />
@@ -217,7 +217,7 @@ function App() {
           }
         />
         <Route
-          path="/families/list"
+          path="/families"
           element={
             <DefaultLayout>
               <PageTitle title="Families List | Your Application" />
@@ -226,7 +226,7 @@ function App() {
           }
         />
         <Route
-          path="/families/family-records"
+          path="/families/family-records/:id"
           element={
             <DefaultLayout>
               <PageTitle title="Family's Records | All Patients" />

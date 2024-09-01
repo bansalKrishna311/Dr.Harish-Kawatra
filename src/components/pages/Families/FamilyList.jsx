@@ -1,32 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-
-const packageData = [
-  {
-    name: 'Family 1',
-    invoiceDate: 'Jan 13, 2023', // This can be removed if no longer needed
-  },
-  {
-    name: 'Family 2',
-    invoiceDate: 'Jan 13, 2023',
-  },
-  {
-    name: 'Family 3',
-    invoiceDate: 'Jan 13, 2023',
-  },
-  {
-    name: 'Family 4',
-    invoiceDate: 'Jan 13, 2023',
-  },
-];
+import axios from 'axios';
 
 const FamilyList = () => {
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [families, setFamilies] = useState([]);
+  const navigate = useNavigate();
 
-  // Function to handle the view button click
-  const handleViewClick = () => {
-    navigate('/families/family-records'); // Redirect to the patient records page
+  useEffect(() => {
+    const fetchFamilies = async () => {
+      try {
+        const response = await axios.get('/api/families');
+        setFamilies(response.data);
+      } catch (error) {
+        console.error('Error fetching families:', error);
+      }
+    };
+
+    fetchFamilies();
+  }, []);
+
+  const handleViewClick = (id) => {
+    navigate(`/families/family-records/${id}`);
   };
 
   return (
@@ -44,11 +39,11 @@ const FamilyList = () => {
             </tr>
           </thead>
           <tbody>
-            {packageData.map((packageItem, index) => (
+            {families.map((family, index) => (
               <tr key={index}>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.name}
+                    {family.familyName}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -71,7 +66,7 @@ const FamilyList = () => {
                     <button
                       aria-label="View"
                       className="bg-yellow-500 hover:bg-yellow-700 text-white p-1 rounded"
-                      onClick={handleViewClick} // Handle the view button click
+                      onClick={() => handleViewClick(family._id)}
                     >
                       <FaEye className="w-4 h-4" />
                     </button>

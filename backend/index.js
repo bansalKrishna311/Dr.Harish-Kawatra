@@ -18,6 +18,9 @@ app.use("/api/v1", user);
 const patientRoutes = require('./routes/patientRoutes');
 app.use('/api/v1', patientRoutes);
 
+const familyRoutes = require('./routes/familyRoutes');  
+app.use('/api', familyRoutes);
+
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });

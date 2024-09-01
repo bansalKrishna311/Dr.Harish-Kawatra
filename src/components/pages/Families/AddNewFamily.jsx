@@ -1,9 +1,43 @@
 import { useState } from 'react';
+import axios from 'axios';
 import MultiSelect from '../../SelectGroup/MultiSelect';
 
 const AddNewFamily = () => {
   const [familyName, setFamilyName] = useState('');
   const [remarks, setRemarks] = useState('');
+  const [selectedPatients, setSelectedPatients] = useState([]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log("helloo")
+      const familyData = {
+        familyName,
+        
+        patients: selectedPatients,
+        remarks,
+      };
+      console.log("helloo2")
+
+      await axios.post('http://localhost:4000/api/families', familyData);
+      console.log("helloo3")
+
+      alert('Family added successfully');
+      console.log("helloo4")
+
+      setFamilyName('');
+      console.log("helloo5")
+
+      setRemarks('');
+      console.log("helloo6")
+
+      setSelectedPatients([]);
+      console.log("helloo7")
+
+    } catch (error) {
+      console.error('Error adding family:', error);
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 gap-9">
@@ -15,7 +49,7 @@ const AddNewFamily = () => {
               Add New Family
             </h3>
           </div>
-          <form action="#">
+          <form onSubmit={handleSubmit}>
             <div className="p-6.5">
               {/* Family Name Field */}
               <div className="mb-4.5">
@@ -28,6 +62,7 @@ const AddNewFamily = () => {
                   onChange={(e) => setFamilyName(e.target.value)}
                   placeholder="Family Name"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  required
                 />
               </div>
 
@@ -36,7 +71,11 @@ const AddNewFamily = () => {
                 <label className="mb-2.5 block text-black dark:text-white">
                   Patients
                 </label>
-                <MultiSelect id="multiSelect" />
+                <MultiSelect
+                  id="multiSelect"
+                  selectedPatients={selectedPatients}
+                  setSelectedPatients={setSelectedPatients}
+                />
               </div>
 
               {/* Remarks Field */}
@@ -53,7 +92,10 @@ const AddNewFamily = () => {
                 ></textarea>
               </div>
 
-              <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-white hover:bg-opacity-90 focus:outline-none">
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded bg-primary p-3 font-medium text-white hover:bg-opacity-90 focus:outline-none"
+              >
                 Publish
               </button>
             </div>
