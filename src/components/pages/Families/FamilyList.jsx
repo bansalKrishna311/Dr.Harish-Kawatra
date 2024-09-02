@@ -68,7 +68,6 @@ const FamilyList = () => {
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3">
-                    {/* Edit Icon */}
                     <button
                       aria-label="Edit"
                       className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
@@ -76,7 +75,6 @@ const FamilyList = () => {
                     >
                       <FaEdit className="w-4 h-4" />
                     </button>
-                    {/* Delete Icon */}
                     <button
                       aria-label="Delete"
                       className="bg-red-500 hover:bg-red-700 text-white p-1 rounded"
@@ -84,7 +82,6 @@ const FamilyList = () => {
                     >
                       <FaTrash className="w-4 h-4" />
                     </button>
-                    {/* View Icon */}
                     <button
                       aria-label="View"
                       className="bg-yellow-500 hover:bg-yellow-700 text-white p-1 rounded"

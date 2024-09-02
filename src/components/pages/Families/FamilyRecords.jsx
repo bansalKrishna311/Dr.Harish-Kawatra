@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaTrash, FaEye } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -11,7 +11,7 @@ const FamilyRecords = () => {
   useEffect(() => {
     const fetchFamily = async () => {
       try {
-        const response = await axios.get(`/api/families/${id}`);
+        const response = await axios.get(`http://localhost:4000/api/families/${id}`);
         setFamily(response.data);
       } catch (error) {
         console.error('Error fetching family:', error);
@@ -57,7 +57,6 @@ const FamilyRecords = () => {
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3">
-                    {/* View Icon */}
                     <button
                       aria-label="View"
                       className="bg-yellow-500 hover:bg-yellow-700 text-white p-1 rounded"

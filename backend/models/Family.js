@@ -1,9 +1,19 @@
 const mongoose = require('mongoose');
 
 const familySchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  patients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Patient' }],
-  remarks: { type: String },
+  name: {
+    type: String,
+    required: true,
+  },
+  patients: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Patient',
+  }],
+  remarks: {
+    type: String,
+  },
 });
 
-module.exports = mongoose.model('Family', familySchema);
+const Family = mongoose.model('Family', familySchema);
+
+module.exports = Family;
