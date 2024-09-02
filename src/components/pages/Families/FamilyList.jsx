@@ -70,24 +70,24 @@ const FamilyList = () => {
                   <div className="flex items-center space-x-3">
                     <button
                       aria-label="Edit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
                       onClick={() => handleEditClick(family._id)}
                     >
-                      <FaEdit className="w-4 h-4" />
+                     <FaEdit className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </button>
                     <button
                       aria-label="Delete"
-                      className="bg-red-500 hover:bg-red-700 text-white p-1 rounded"
+                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
                       onClick={() => handleDeleteClick(family._id)}
                     >
-                      <FaTrash className="w-4 h-4" />
+                         <FaTrash className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </button>
                     <button
                       aria-label="View"
-                      className="bg-yellow-500 hover:bg-yellow-700 text-white p-1 rounded"
+                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
                       onClick={() => handleViewClick(family._id)}
                     >
-                      <FaEye className="w-4 h-4" />
+                     <FaEye className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </button>
                   </div>
                 </td>
