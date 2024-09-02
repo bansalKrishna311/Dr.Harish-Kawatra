@@ -10,7 +10,7 @@ const FamilyList = () => {
   useEffect(() => {
     const fetchFamilies = async () => {
       try {
-        const response = await axios.get('/api/families');
+        const response = await axios.get('http://localhost:4000/api/families');
         setFamilies(response.data);
       } catch (error) {
         console.error('Error fetching families:', error);
@@ -39,12 +39,19 @@ const FamilyList = () => {
             </tr>
           </thead>
           <tbody>
-            {families.map((family, index) => (
-              <tr key={index}>
+            {families.map((family) => (
+              <tr key={family._id}>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {family.familyName}
+                    {family.name}
                   </h5>
+                  <ul className="ml-5 list-disc">
+                    {family.patients.map((patient) => (
+                      <li key={patient._id} className="text-sm text-gray-600 dark:text-gray-400">
+                        {patient.name}
+                      </li>
+                    ))}
+                  </ul>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3">

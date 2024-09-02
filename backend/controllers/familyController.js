@@ -2,10 +2,10 @@ const Family = require('../models/Family');
 
 exports.addFamily = async (req, res) => {
   try {
-    const { familyName, patients, remarks } = req.body;
+    const { name, patients, remarks } = req.body;
 
     const newFamily = new Family({
-      familyName,
+      name,
       patients,
       remarks,
     });

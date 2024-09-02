@@ -32,7 +32,7 @@ const FamilyRecords = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="font-medium text-black dark:text-white">
-        Family: {family.familyName}
+        Family: {family.name}
       </h3>
       <p className="text-gray-600 dark:text-gray-400">Remarks: {family.remarks}</p>
       <div className="max-w-full overflow-x-auto mt-5">

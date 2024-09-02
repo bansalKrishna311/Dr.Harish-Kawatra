@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-const MultiSelect = ({ id }) => {
+const MultiSelect = ({ selectedPatients, setSelectedPatients }) => {
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState([]);
   const [show, setShow] = useState(false);
@@ -36,15 +36,18 @@ const MultiSelect = ({ id }) => {
 
   const select = (index, event) => {
     const newOptions = [...options];
+    const selectedPatientId = newOptions[index].value;
 
     if (!newOptions[index].selected) {
       newOptions[index].selected = true;
       setSelected([...selected, index]);
+      setSelectedPatients([...selectedPatients, selectedPatientId]); // Add selected patient ID
     } else {
       const selectedIndex = selected.indexOf(index);
       if (selectedIndex !== -1) {
         newOptions[index].selected = false;
         setSelected(selected.filter((i) => i !== index));
+        setSelectedPatients(selectedPatients.filter(id => id !== selectedPatientId)); // Remove unselected patient ID
       }
     }
 
@@ -57,13 +60,11 @@ const MultiSelect = ({ id }) => {
 
     if (selectedIndex !== -1) {
       newOptions[index].selected = false;
+      const selectedPatientId = newOptions[index].value;
       setSelected(selected.filter((i) => i !== index));
+      setSelectedPatients(selectedPatients.filter(id => id !== selectedPatientId)); // Remove patient ID
       setOptions(newOptions);
     }
-  };
-
-  const selectedValues = () => {
-    return selected.map((option) => options[option].value);
   };
 
   useEffect(() => {
@@ -78,7 +79,7 @@ const MultiSelect = ({ id }) => {
 
   return (
     <div className="relative z-50">
-      <input name="values" type="hidden" value={selectedValues().join(',')} />
+      <input name="values" type="hidden" value={selectedPatients.join(',')} />
       <div className="relative z-20 inline-block w-full">
         <div className="relative flex flex-col items-center">
           <div ref={trigger} onClick={open} className="w-full">
@@ -105,76 +106,52 @@ const MultiSelect = ({ id }) => {
                             fillRule="evenodd"
                             clipRule="evenodd"
                             d="M9.35355 3.35355C9.54882 3.15829 9.54882 2.84171 9.35355 2.64645C9.15829 2.45118 8.84171 2.45118 8.64645 2.64645L6 5.29289L3.35355 2.64645C3.15829 2.45118 2.84171 2.45118 2.64645 2.64645C2.45118 2.84171 2.45118 3.15829 2.64645 3.35355L5.29289 6L2.64645 8.64645C2.45118 8.84171 2.45118 9.15829 2.64645 9.35355C2.84171 9.54882 3.15829 9.54882 3.35355 9.35355L6 6.70711L8.64645 9.35355C8.84171 9.54882 9.15829 9.54882 9.35355 9.35355C9.54882 9.15829 9.54882 8.84171 9.35355 8.64645L6.70711 6L9.35355 3.35355Z"
-                            fill="currentColor"
+                            fill="#A0AEC0"
                           ></path>
                         </svg>
                       </div>
                     </div>
                   </div>
                 ))}
-                {selected.length === 0 && (
-                  <div className="flex-1">
-                    <input
-                      placeholder="Select a Patient"
-                      className="h-full w-full appearance-none bg-transparent p-1 px-2 outline-none"
-                      value=""
-                      readOnly
-                    />
-                  </div>
-                )}
               </div>
-              <div className="flex w-8 items-center py-1 pl-1 pr-1">
-                <button type="button" onClick={open} className="h-6 w-6 cursor-pointer outline-none focus:outline-none">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g opacity="0.8">
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                        fill="#637381"
-                      ></path>
-                    </g>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="w-full px-4">
-            <div
-              className={`max-h-select absolute top-full left-0 z-40 w-full overflow-y-auto rounded bg-white shadow ${
-                isOpen() ? '' : 'hidden'
-              }`}
-              ref={dropdownRef}
-            >
-              <div className="flex w-full flex-col">
-                {options.map((option, index) => (
-                  <div key={index}>
-                    <div
-                      className="w-full cursor-pointer rounded-t border-b hover:bg-primary/5"
-                      onClick={(event) => select(index, event)}
-                    >
-                      <div
-                        className={`relative flex w-full items-center border-l-2 border-transparent p-2 pl-2 ${
-                          option.selected ? 'border-primary' : ''
-                        }`}
-                      >
-                        <div className="flex w-full items-center">
-                          <div className="mx-2 leading-6">{option.text}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <div className="ml-auto cursor-pointer px-1">
+                <svg
+                  className={`fill-current text-black dark:text-white ${show && 'rotate-180'}`}
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 9L12 15L18 9"
+                    stroke="#333"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
             </div>
           </div>
         </div>
+        {isOpen() && (
+          <div ref={dropdownRef} className="absolute top-full z-40 mt-1 w-full rounded border bg-white py-1 shadow-lg">
+            <ul className="h-48 overflow-auto">
+              {options.map((option, index) => (
+                <li
+                  key={index}
+                  onClick={(e) => select(index, e)}
+                  className={`cursor-pointer select-none px-4 py-2 hover:bg-gray-100 ${
+                    option.selected ? 'bg-primary text-white' : 'text-black'
+                  }`}
+                >
+                  {option.text}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

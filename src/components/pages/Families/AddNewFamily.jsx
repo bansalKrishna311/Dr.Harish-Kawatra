@@ -3,37 +3,26 @@ import axios from 'axios';
 import MultiSelect from '../../SelectGroup/MultiSelect';
 
 const AddNewFamily = () => {
-  const [familyName, setFamilyName] = useState('');
+  const [name, setname] = useState('');
   const [remarks, setRemarks] = useState('');
-  const [selectedPatients, setSelectedPatients] = useState([]);
+  const [selectedPatients, setSelectedPatients] = useState([]); // Updated to hold patient IDs
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("helloo")
       const familyData = {
-        familyName,
-        
-        patients: selectedPatients,
+        name,
+        patients: selectedPatients, // This should now correctly contain patient IDs
         remarks,
       };
-      console.log("helloo2")
 
       await axios.post('http://localhost:4000/api/families', familyData);
-      console.log("helloo3")
 
       alert('Family added successfully');
-      console.log("helloo4")
 
-      setFamilyName('');
-      console.log("helloo5")
-
+      setname('');
       setRemarks('');
-      console.log("helloo6")
-
       setSelectedPatients([]);
-      console.log("helloo7")
-
     } catch (error) {
       console.error('Error adding family:', error);
     }
@@ -42,7 +31,6 @@ const AddNewFamily = () => {
   return (
     <div className="grid grid-cols-1 gap-9">
       <div className="w-full">
-        {/* Add New Family Form */}
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">
@@ -51,34 +39,30 @@ const AddNewFamily = () => {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="p-6.5">
-              {/* Family Name Field */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Family Name
                 </label>
                 <input
                   type="text"
-                  value={familyName}
-                  onChange={(e) => setFamilyName(e.target.value)}
+                  value={name}
+                  onChange={(e) => setname(e.target.value)}
                   placeholder="Family Name"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   required
                 />
               </div>
 
-              {/* MultiSelect Component for Patients */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Patients
                 </label>
                 <MultiSelect
-                  id="multiSelect"
-                  selectedPatients={selectedPatients}
-                  setSelectedPatients={setSelectedPatients}
+                  selectedPatients={selectedPatients} // Pass selectedPatients
+                  setSelectedPatients={setSelectedPatients} // Pass setSelectedPatients
                 />
               </div>
 
-              {/* Remarks Field */}
               <div className="mb-6">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Remarks

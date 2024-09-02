@@ -8,6 +8,8 @@ const PatientSchema = new mongoose.Schema({
   },
   name: {
     type: String,
+    unique: true,  // Ensure IDs are unique
+    required: true
   },
   gender: {
     type: String,
