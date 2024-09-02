@@ -112,7 +112,7 @@ const PatientList = () => {
               onClick={() => paginate(i + 1)}
               className={`mx-1 px-3 py-1 border rounded ${currentPage === i + 1
                 ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-300'
+                : 'bg-gray-200 text-gray-600 dark:bg-gzray-600 dark:text-gray-300'
               }`}
             >
               {i + 1}
