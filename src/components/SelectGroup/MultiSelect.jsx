@@ -93,7 +93,7 @@ const MultiSelect = ({ selectedPatients, setSelectedPatients }) => {
 
   return (
     <div className="relative z-50">
-      <input name="values" type="hidden" value={selectedPatients.join(',')} />
+      <input name="values" type="hidden"    placeholder="Select the Patients that Belong to this Family " value={selectedPatients.join(',')} />
       <div className="relative z-20 inline-block w-full">
         <div className="relative flex flex-col items-center">
           <div ref={trigger} onClick={open} className="w-full">

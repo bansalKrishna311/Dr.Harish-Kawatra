@@ -175,7 +175,7 @@ function App() {
           path="/patients/add-new"
           element={
             <DefaultLayout>
-              <PageTitle title="Add New Patient | Your Application" />
+              <PageTitle title="Add New Patient |  Dr.Kawatra" />
               <AddPatient />
             </DefaultLayout>
           }
@@ -184,7 +184,7 @@ function App() {
           path="/patients/:id/edit"
           element={
             <DefaultLayout>
-              <PageTitle title="Add Existing Patient | Your Application" />
+              <PageTitle title="Edit Patient |  Dr.Kawatra" />
               <ExistingPatient />
             </DefaultLayout>
           }
@@ -193,7 +193,7 @@ function App() {
           path="/patients"
           element={
             <DefaultLayout>
-              <PageTitle title="Patients List | Your Application" />
+              <PageTitle title="Patients List | Dr.Kawatra" />
               <PatientList />
             </DefaultLayout>
           }
@@ -202,7 +202,7 @@ function App() {
           path="/patients/:id/records"
           element={
             <DefaultLayout>
-              <PageTitle title="Patient Records | Your Application" />
+              <PageTitle title="Patient Records | Dr.Kawatra" />
               <PatientRecords />
             </DefaultLayout>
           }
@@ -211,7 +211,7 @@ function App() {
           path="/patients/add-existing"
           element={
             <DefaultLayout>
-              <PageTitle title="Add Existing Patient | Your Application" />
+              <PageTitle title="Add Existing Patient |  Dr.Kawatra" />
               <ExistingPatient />
             </DefaultLayout>
           }
@@ -221,7 +221,7 @@ function App() {
           path="/families/new"
           element={
             <DefaultLayout>
-              <PageTitle title="Add New Family | Your Application" />
+              <PageTitle title="Add New Family |  Dr.Kawatra" />
               <AddOrEditFamily />
             </DefaultLayout>
           }
@@ -230,7 +230,7 @@ function App() {
           path="/families/edit/:id"
           element={
             <DefaultLayout>
-              <PageTitle title="Add New Family | Your Application" />
+              <PageTitle title="Add New Family |  Dr.Kawatra" />
               <AddOrEditFamily />
             </DefaultLayout>
           }
@@ -239,7 +239,7 @@ function App() {
           path="/families"
           element={
             <DefaultLayout>
-              <PageTitle title="Families List | Your Application" />
+              <PageTitle title="Families List |  Dr.Kawatra" />
               <FamilyList />
             </DefaultLayout>
           }
@@ -248,7 +248,7 @@ function App() {
           path="/families/family-records/:id"
           element={
             <DefaultLayout>
-              <PageTitle title="Family's Records | All Patients" />
+              <PageTitle title="Family's Records | Dr.Kawatra" />
               <FamilyRecords />
             </DefaultLayout>
           }
