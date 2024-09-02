@@ -24,6 +24,19 @@ const FamilyList = () => {
     navigate(`/families/family-records/${id}`);
   };
 
+  const handleEditClick = (id) => {
+    navigate(`/families/edit/${id}`);
+  };
+
+  const handleDeleteClick = async (id) => {
+    try {
+      await axios.delete(`http://localhost:4000/api/families/${id}`);
+      setFamilies(families.filter((family) => family._id !== id));
+    } catch (error) {
+      console.error('Error deleting family:', error);
+    }
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
@@ -59,6 +72,7 @@ const FamilyList = () => {
                     <button
                       aria-label="Edit"
                       className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
+                      onClick={() => handleEditClick(family._id)}
                     >
                       <FaEdit className="w-4 h-4" />
                     </button>
@@ -66,6 +80,7 @@ const FamilyList = () => {
                     <button
                       aria-label="Delete"
                       className="bg-red-500 hover:bg-red-700 text-white p-1 rounded"
+                      onClick={() => handleDeleteClick(family._id)}
                     >
                       <FaTrash className="w-4 h-4" />
                     </button>

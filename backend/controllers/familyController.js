@@ -26,3 +26,18 @@ exports.getAllFamilies = async (req, res) => {
     res.status(500).json({ message: 'Server Error', error });
   }
 };
+
+exports.deleteFamily = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedFamily = await Family.findByIdAndDelete(id);
+
+    if (!deletedFamily) {
+      return res.status(404).json({ message: 'Family not found' });
+    }
+
+    res.status(200).json({ message: 'Family deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
+};
