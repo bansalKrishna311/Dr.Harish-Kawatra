@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AddPatient from './components/pages/Patients/AddPatient';
 import ExistingPatient from './components/pages/Patients/ExistingPatient';
 import PatientList from './components/pages/Patients/PatientList';
-import AddNewFamily from './components/pages/Families/AddNewFamily';
+import AddNewFamily from './components/pages/Families/AddOrEditFamily';
 import FamilyList from './components/pages/Families/FamilyList';
 import DefaultLayout from './layout/DefaultLayout';
 import PatientRecords from './components/pages/Patients/PatientsRecords';
@@ -16,6 +16,7 @@ import FamilyRecords from './components/pages/Families/FamilyRecords';
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
 import Home from './components/pages/Home/Home';
+import AddOrEditFamily from './components/pages/Families/AddOrEditFamily';
 
 export const UserContext = createContext();
 
@@ -221,7 +222,16 @@ function App() {
           element={
             <DefaultLayout>
               <PageTitle title="Add New Family | Your Application" />
-              <AddNewFamily />
+              <AddOrEditFamily />
+            </DefaultLayout>
+          }
+        />
+         <Route
+          path="/families/edit/:id"
+          element={
+            <DefaultLayout>
+              <PageTitle title="Add New Family | Your Application" />
+              <AddOrEditFamily />
             </DefaultLayout>
           }
         />

@@ -17,7 +17,7 @@ const MultiSelect = ({ selectedPatients, setSelectedPatients }) => {
         const patients = response.data.map((patient) => ({
           value: patient._id,
           text: patient.name,
-          selected: false,
+          selected: selectedPatients.includes(patient._id), // Mark selected if in selectedPatients
         }));
         setOptions(patients);
         setFilteredOptions(patients); // Initialize filteredOptions
@@ -28,6 +28,11 @@ const MultiSelect = ({ selectedPatients, setSelectedPatients }) => {
 
     fetchPatients();
   }, []);
+
+  useEffect(() => {
+    const newSelected = options.filter(option => selectedPatients.includes(option.value)).map(option => option.value);
+    setSelected(newSelected);
+  }, [selectedPatients, options]);
 
   const open = () => {
     setShow(true);

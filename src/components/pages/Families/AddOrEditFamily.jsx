@@ -1,30 +1,54 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MultiSelect from '../../SelectGroup/MultiSelect';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const AddNewFamily = () => {
-  const [name, setname] = useState('');
+const AddOrEditFamily = () => {
+  const [name, setName] = useState('');
   const [remarks, setRemarks] = useState('');
-  const [selectedPatients, setSelectedPatients] = useState([]); // Updated to hold patient IDs
+  const [selectedPatients, setSelectedPatients] = useState([]);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEdit = !!id;
+
+  useEffect(() => {
+    if (isEdit) {
+      const fetchFamily = async () => {
+        try {
+          const response = await axios.get(`http://localhost:4000/api/families/${id}`);
+          const family = response.data;
+          setName(family.name);
+          setRemarks(family.remarks);
+          setSelectedPatients(family.patients.map((patient) => patient._id));
+        } catch (error) {
+          console.error('Error fetching family:', error);
+        }
+      };
+
+      fetchFamily();
+    }
+  }, [id, isEdit]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const familyData = {
         name,
-        patients: selectedPatients, // This should now correctly contain patient IDs
+        patients: selectedPatients,
         remarks,
       };
 
-      await axios.post('http://localhost:4000/api/families', familyData);
+      if (isEdit) {
+        await axios.put(`http://localhost:4000/api/families/${id}`, familyData);
+        alert('Family updated successfully');
+      } else {
+        await axios.post('http://localhost:4000/api/families', familyData);
+        alert('Family added successfully');
+      }
 
-      alert('Family added successfully');
-
-      setname('');
-      setRemarks('');
-      setSelectedPatients([]);
+      navigate('/families');
     } catch (error) {
-      console.error('Error adding family:', error);
+      console.error(`Error ${isEdit ? 'updating' : 'adding'} family:`, error);
     }
   };
 
@@ -34,7 +58,7 @@ const AddNewFamily = () => {
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">
-              Add New Family
+              {isEdit ? 'Edit Family' : 'Add New Family'}
             </h3>
           </div>
           <form onSubmit={handleSubmit}>
@@ -46,7 +70,7 @@ const AddNewFamily = () => {
                 <input
                   type="text"
                   value={name}
-                  onChange={(e) => setname(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Family Name"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   required
@@ -58,8 +82,8 @@ const AddNewFamily = () => {
                   Patients
                 </label>
                 <MultiSelect
-                  selectedPatients={selectedPatients} // Pass selectedPatients
-                  setSelectedPatients={setSelectedPatients} // Pass setSelectedPatients
+                  selectedPatients={selectedPatients}
+                  setSelectedPatients={setSelectedPatients}
                 />
               </div>
 
@@ -80,7 +104,7 @@ const AddNewFamily = () => {
                 type="submit"
                 className="flex w-full justify-center rounded bg-primary p-3 font-medium text-white hover:bg-opacity-90 focus:outline-none"
               >
-                Publish
+                {isEdit ? 'Update' : 'Publish'}
               </button>
             </div>
           </form>
@@ -90,4 +114,4 @@ const AddNewFamily = () => {
   );
 };
 
-export default AddNewFamily;
+export default AddOrEditFamily;
