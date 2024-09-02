@@ -6,7 +6,7 @@ import PageTitle from './components/PageTitle';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddPatient from './components/pages/Patients/AddPatient';
-import ExistingPatient from './components/pages/Patients/ExistingPatient';
+import EditPatient from './components/pages/Patients/EditPatient';
 import PatientList from './components/pages/Patients/PatientList';
 import AddNewFamily from './components/pages/Families/AddOrEditFamily';
 import FamilyList from './components/pages/Families/FamilyList';
@@ -17,6 +17,7 @@ import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
 import Home from './components/pages/Home/Home';
 import AddOrEditFamily from './components/pages/Families/AddOrEditFamily';
+import ExistingPatient from './components/pages/Patients/records/ExistingPatient';
 
 export const UserContext = createContext();
 
@@ -185,7 +186,7 @@ function App() {
           element={
             <DefaultLayout>
               <PageTitle title="Edit Patient |  Dr.Kawatra" />
-              <ExistingPatient />
+              <EditPatient />
             </DefaultLayout>
           }
         />
@@ -212,10 +213,19 @@ function App() {
           element={
             <DefaultLayout>
               <PageTitle title="Add Existing Patient |  Dr.Kawatra" />
-              <ExistingPatient />
+              <EditPatient />
             </DefaultLayout>
           }
         />
+            <Route
+          path="/patients/ExistingPatient"
+          element={
+            <DefaultLayout>
+              <PageTitle title="Add Existing Patient |  Dr.Kawatra" />
+              <ExistingPatient />
+            </DefaultLayout>
+          }
+        />  
         {/* Families Routes */}
         <Route
           path="/families/new"

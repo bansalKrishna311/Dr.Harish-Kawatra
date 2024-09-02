@@ -14,7 +14,7 @@ interface Patient {
   remarks: string;
 }
 
-const ExistingPatient = () => {
+const EditPatient = () => {
   const { id } = useParams<{ id: string }>(); // Capture the ID from the URL
   const navigate = useNavigate();
   const [patient, setPatient] = useState<Patient | null>(null); // State to hold the patient data
@@ -255,4 +255,4 @@ const ExistingPatient = () => {
   );
 };
 
-export default ExistingPatient;
+export default EditPatient;
