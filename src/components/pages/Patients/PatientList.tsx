@@ -2,33 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Select from 'react-select';
-
-type Patient = {
-  _id: string;
-  name: string;
-  age: number;
-  gender: string;
-  createdAt: string; // Assuming createdAt is a date string or timestamp
-};
-
-type FamilyOption = {
-  value: string;
-  label: string;
-};
-
-const families: FamilyOption[] = [
-  { value: 'Family A', label: 'Family A' },
-  { value: 'Family B', label: 'Family B' },
-  { value: 'Family C', label: 'Family C' },
-];
 
 const PatientList = () => {
   const navigate = useNavigate();
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [selectedFamilies, setSelectedFamilies] = useState<Record<string, string>>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [patientsPerPage] = useState(100);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -41,13 +22,6 @@ const PatientList = () => {
 
     fetchPatients();
   }, []);
-
-  const handleFamilyChange = (patientId: string, selectedOption: any) => {
-    setSelectedFamilies({
-      ...selectedFamilies,
-      [patientId]: selectedOption ? selectedOption.value : '',
-    });
-  };
 
   const handleDelete = async (patientId: string) => {
     try {
@@ -62,12 +36,15 @@ const PatientList = () => {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
-  // Sorting patients by creation date (latest first)
-  const sortedPatients = [...patients]
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .filter(patient =>
-      patient.name.toLowerCase().includes(searchTerm)
-    );
+  const sortedPatients = patients
+    .filter(patient => patient.name.toLowerCase().includes(searchTerm))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  const indexOfLastPatient = currentPage * patientsPerPage;
+  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
+  const currentPatients = sortedPatients.slice(indexOfFirstPatient, indexOfLastPatient);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div className="w-full rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -88,13 +65,10 @@ const PatientList = () => {
               <th className="py-4 px-4 font-medium text-black dark:text-white">
                 Actions
               </th>
-              <th className="py-4 px-4 font-medium text-black dark:text-white">
-                Family
-              </th>
             </tr>
           </thead>
           <tbody>
-            {sortedPatients.map((patient) => (
+            {currentPatients.map((patient) => (
               <tr key={patient._id}>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <h5 className="font-medium text-black dark:text-white">
@@ -126,21 +100,25 @@ const PatientList = () => {
                     </button>
                   </div>
                 </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <Select
-                    options={families}
-                    value={families.find(family => family.value === selectedFamilies[patient._id]) || null}
-                    onChange={(option) => handleFamilyChange(patient._id, option)}
-                    className="w-full dark:border-strokedark"
-                    classNamePrefix="react-select"
-                    isClearable
-                    placeholder="Select a family"
-                  />
-                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {/* Pagination Controls */}
+        <div className="flex justify-center mt-4">
+          {Array.from({ length: Math.ceil(sortedPatients.length / patientsPerPage) }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => paginate(i + 1)}
+              className={`mx-1 px-3 py-1 border rounded ${currentPage === i + 1
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-300'
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
