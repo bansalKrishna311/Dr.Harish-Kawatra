@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FcGoogle } from 'react-icons/fc';
+
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const Signup = () => {
@@ -112,7 +112,7 @@ const Signup = () => {
                                     </span>
                                 </div>
                             </div>
-                            <div className="flex items-center justify-between">
+                            {/* <div className="flex items-center justify-between">
                                 <div className="flex items-center">
                                     <input
                                         id="remember_me"
@@ -135,7 +135,7 @@ const Signup = () => {
                                         Forgot your password?
                                     </a>
                                 </div>
-                            </div>
+                            </div> */}
                             <div>
                                 <button
                                     type="submit"

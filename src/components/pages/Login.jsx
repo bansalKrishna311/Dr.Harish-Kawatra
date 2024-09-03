@@ -4,10 +4,13 @@ import { UserContext } from '../../App';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { FiEye, FiEyeOff } from 'react-icons/fi';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { handleLogin } = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -51,20 +54,37 @@ const Login = () => {
                                 </div>
                             </div>
                             <div>
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                                <div className="mt-1">
+                                <label
+                                    htmlFor="password"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Password
+                                </label>
+                                <div className="mt-1 relative">
                                     <input
                                         id="password"
                                         name="password"
-                                        type="password"
+                                        type={showPassword ? 'text' : 'password'}
                                         required
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm sm:text-sm"
+                                        className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 pr-10 placeholder-gray-400 shadow-sm sm:text-sm"
                                     />
+                                    <span
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                                    >
+                                        {showPassword ? (
+                                            <FiEye className="h-5 w-5 text-gray-400" />
+                                        ) : (
+                                            <FiEyeOff className="h-5 w-5 text-gray-400" />
+                                        )}
+                                    </span>
                                 </div>
                             </div>
-                            <div className="flex items-center justify-between">
+                           
+                            {/* remember me and forget pass ui */}
+                            {/* <div className="flex items-center justify-between">
                                 <div className="flex items-center">
                                     <input
                                         id="remember_me"
@@ -77,7 +97,7 @@ const Login = () => {
                                 <div className="text-sm">
                                     <a href="/" className="font-medium text-black-600 hover:text-black-500">Forgot your password?</a>
                                 </div>
-                            </div>
+                            </div> */}
                             <div>
                                 <button
                                     type="submit"
