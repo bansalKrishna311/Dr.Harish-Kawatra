@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 type PatientVisit = {
   _id: string;
@@ -12,6 +12,7 @@ type PatientVisit = {
 const PatientsRecords = () => {
   const { patientId } = useParams<{ patientId: string }>();
   const [patientRecords, setPatientRecords] = useState<PatientVisit[]>([]);
+  const navigate = useNavigate();
 
   const fetchPatientRecords = async () => {
     if (patientId) {
@@ -26,14 +27,24 @@ const PatientsRecords = () => {
     }
   };
 
-
   useEffect(() => {
     fetchPatientRecords();
   }, [patientId]);
 
-  if (!patientRecords.length) {
-    console.log('No records found.');
-  }
+  const handleEdit = (visitId: string) => {
+    // Navigate to the edit page with the visit ID
+    navigate(`/edit-visit/${visitId}`);
+  };
+
+  const handleDelete = async (visitId: string) => {
+    try {
+      await axios.delete(`http://localhost:4000/api/v1/visits/${visitId}`);
+      // Refresh the patient records after deletion
+      fetchPatientRecords();
+    } catch (error) {
+      console.error('Error deleting visit:', error);
+    }
+  };
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -91,3 +102,5 @@ const PatientsRecords = () => {
 };
 
 export default PatientsRecords;
+
+

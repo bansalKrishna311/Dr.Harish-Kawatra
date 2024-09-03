@@ -18,6 +18,7 @@ import Signup from './components/pages/Signup';
 import Home from './components/pages/Home/Home';
 import AddOrEditFamily from './components/pages/Families/AddOrEditFamily';
 import ExistingPatient from './components/pages/Patients/records/ExistingPatient';
+import EditVisit from './components/pages/Patients/records/EditVisit';
 
 export const UserContext = createContext();
 
@@ -226,6 +227,17 @@ function App() {
             </DefaultLayout>
           }
         />  
+
+<Route
+          path="/edit-visit/:visitId"
+          element={
+            <DefaultLayout>
+              <PageTitle title="Add Existing Patient |  Dr.Kawatra" />
+              <EditVisit />
+            </DefaultLayout>
+          }
+        />  
+
         {/* Families Routes */}
         <Route
           path="/families/new"

@@ -7,6 +7,8 @@ const FamilyRecords = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [family, setFamily] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' for ascending, 'desc' for descending
 
   useEffect(() => {
     const fetchFamily = async () => {
@@ -22,8 +24,25 @@ const FamilyRecords = () => {
   }, [id]);
 
   const handlePatientViewClick = (patientId) => {
-    navigate(`/patients/${patientId}`);
+    navigate(`/patients/${patientId}/records`);
   };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSortToggle = () => {
+    setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
+  };
+
+  const filteredAndSortedPatients = family?.patients
+    .filter((patient) =>
+      patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      const comparison = a.name.localeCompare(b.name);
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
 
   if (!family) {
     return <div>Loading...</div>;
@@ -35,6 +54,24 @@ const FamilyRecords = () => {
         Family: {family.name}
       </h3>
       <p className="text-gray-600 dark:text-gray-400">Remarks: {family.remarks}</p>
+      
+      {/* Search and Sort Controls */}
+      <div className="flex justify-between items-center my-4">
+        <input
+          type="text"
+          placeholder="Search patients..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="px-4 py-2 border border-gray-300 rounded dark:border-strokedark dark:bg-boxdark dark:text-white"
+        />
+        <button
+          onClick={handleSortToggle}
+          className="px-4 py-2 bg-blue-500 dark:text-white rounded hover:bg-blue-600"
+        >
+          Sort by Name ({sortOrder === 'asc' ? 'Ascending' : 'Descending'})
+        </button>
+      </div>
+
       <div className="max-w-full overflow-x-auto mt-5">
         <table className="w-full table-auto">
           <thead>
@@ -48,7 +85,7 @@ const FamilyRecords = () => {
             </tr>
           </thead>
           <tbody>
-            {family.patients.map((patient, index) => (
+            {filteredAndSortedPatients?.map((patient, index) => (
               <tr key={index}>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
@@ -59,7 +96,7 @@ const FamilyRecords = () => {
                   <div className="flex items-center space-x-3">
                     <button
                       aria-label="View"
-                      className="bg-yellow-500 hover:bg-yellow-700 text-white p-1 rounded"
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
                       onClick={() => handlePatientViewClick(patient._id)}
                     >
                       <FaEye className="w-4 h-4" />

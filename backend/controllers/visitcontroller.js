@@ -54,6 +54,7 @@ const deleteVisit = async (req, res) => {
   }
 };
 
+
 module.exports = {
   createVisit,
   getVisits,
