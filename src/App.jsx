@@ -11,7 +11,7 @@ import PatientList from './components/pages/Patients/PatientList';
 import AddNewFamily from './components/pages/Families/AddOrEditFamily';
 import FamilyList from './components/pages/Families/FamilyList';
 import DefaultLayout from './layout/DefaultLayout';
-import PatientRecords from './components/pages/Patients/PatientsRecords';
+import PatientRecords from './components/pages/Patients/records/PatientsRecords';
 import FamilyRecords from './components/pages/Families/FamilyRecords';
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
@@ -200,7 +200,7 @@ function App() {
           }
         />
        <Route
-          path="/patients/:id/records"
+          path="/patients/:patientId/records"
           element={
             <DefaultLayout>
               <PageTitle title="Patient Records | Dr.Kawatra" />

@@ -14,7 +14,6 @@ const PatientList = () => {
     const fetchPatients = async () => {
       try {
         const response = await axios.get('http://localhost:4000/api/v1/patients');
-        // console.log("patient data = " ,  response.data)
         setPatients(response.data);
       } catch (error) {
         console.error('Error fetching patients:', error);
@@ -35,6 +34,10 @@ const PatientList = () => {
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value.toLowerCase());
+  };
+
+  const handleView = (patientId: string) => {
+    navigate(`/patients/${patientId}/records`);
   };
 
   const sortedPatients = patients
@@ -95,7 +98,7 @@ const PatientList = () => {
                     <button
                       aria-label="View"
                       className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => navigate(`/patients/${patient._id}/records`)}
+                      onClick={() => handleView(patient._id)}
                     >
                       <FaEye className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </button>
@@ -105,7 +108,6 @@ const PatientList = () => {
             ))}
           </tbody>
         </table>
-        {/* Pagination Controls */}
         <div className="flex justify-center mt-4">
           {Array.from({ length: Math.ceil(sortedPatients.length / patientsPerPage) }, (_, i) => (
             <button

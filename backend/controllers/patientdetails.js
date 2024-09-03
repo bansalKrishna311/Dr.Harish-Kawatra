@@ -1,4 +1,5 @@
 const Patient = require('../models/PatientSchema');
+const Visit = require('../models/visitmodel');
 
 // Add a new patient
 const addPatient = async (req, res) => {
@@ -56,6 +57,19 @@ const getPatientById = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch patient', error });
   }
 };
+const getPatientVisits = async (req, res) => {
+  try {
+    console.log(req.query,req.params)
+      const visits = await Visit.find({ patientId: req.params.id });
+      console.log('Visits:', visits);
+      res.status(200).json(visits);
+
+
+      console.log('Fetched visits:', visits); 
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching patient visits', error });
+  }
+};
 
 module.exports = {
   addPatient,
@@ -63,4 +77,5 @@ module.exports = {
   deletePatient,
   updatePatient,
   getPatientById,
+  getPatientVisits
 };
