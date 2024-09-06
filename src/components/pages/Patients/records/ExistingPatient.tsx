@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 const ExistingPatient = () => {
   const { visitId } = useParams<{ visitId: string }>();
-  const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
+  const [selectedPatient, setSelectedPatient] = useState<number| null>(null);
   const [visitDate, setVisitDate] = useState('');
   const [symptoms, setSymptoms] = useState<string[]>(['']);
   const [diseases, setDiseases] = useState<string[]>(['']);
@@ -20,7 +20,8 @@ const ExistingPatient = () => {
         try {
           const response = await axios.get(`http://localhost:4000/api/v1/visits/${visitId}`);
           const visit = response.data;
-          setSelectedPatient(visit.patientId);
+          setSelectedPatient(selectedPatient);
+
           setVisitDate(visit.visitDate);
           setSymptoms(visit.symptoms);
           setDiseases(visit.diseases);

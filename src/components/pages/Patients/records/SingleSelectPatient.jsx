@@ -14,10 +14,11 @@ const SingleSelectPatient = ({ selectedPatient, setSelectedPatient }) => {
       try {
         const response = await axios.get('http://localhost:4000/api/v1/patients');
         const patients = response.data.map((patient) => ({
-          value: patient._id,
+          value: patient.id,
           text: patient.name,
         }));
         setOptions(patients);
+        console.log('Options',options)
         setFilteredOptions(patients); // Initialize filteredOptions
       } catch (error) {
         console.error('Error fetching patients:', error);
@@ -39,6 +40,7 @@ const SingleSelectPatient = ({ selectedPatient, setSelectedPatient }) => {
   const close = () => setShow(false);
 
   const select = (value) => {
+    console.log('Value',value)
     setSelectedPatient(value); // Update selected patient
     close(); // Close dropdown after selection
   };

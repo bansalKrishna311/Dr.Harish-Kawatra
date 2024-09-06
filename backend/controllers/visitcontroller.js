@@ -5,8 +5,11 @@ const createVisit = async (req, res) => {
   try {
     const visit = new Visit(req.body);
     await visit.save();
+    console.log('Visit:', visit);
+    
     res.status(201).json({ message: 'Visit added successfully', visit });
   } catch (error) {
+    console.error('Error creating visit:', error);
     res.status(400).json({ error: error.message });
   }
 };
