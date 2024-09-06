@@ -4,22 +4,20 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router-dom';
 
 type PatientVisit = {
-  _id: string;
+  id: string;
   visitDate: string;
   diseases: string[];
 };
 
 const PatientsRecords = () => {
-  const { patientId } = useParams<{ patientId: string }>();
+  const { patient_id } = useParams<{ patient_id: string }>();
   const [patientRecords, setPatientRecords] = useState<PatientVisit[]>([]);
   const navigate = useNavigate();
 
   const fetchPatientRecords = async () => {
-    if (patientId) {
+    if (patient_id) {
       try {
-        console.log(`Fetching records for patient ID: ${patientId}`);
-        const response = await axios.get(`http://localhost:4000/api/v1/patients/${patientId}/records`);
-        console.log('API Response:', response.data);
+        const response = await axios.get(`http://localhost:4000/api/v1/patients/${patient_id}/records`);
         setPatientRecords(response.data);
       } catch (error) {
         console.error('Error fetching patient records:', error);
@@ -29,18 +27,16 @@ const PatientsRecords = () => {
 
   useEffect(() => {
     fetchPatientRecords();
-  }, [patientId]);
+  }, [patient_id]);
 
   const handleEdit = (visitId: string) => {
-    // Navigate to the edit page with the visit ID
     navigate(`/edit-visit/${visitId}`);
   };
 
   const handleDelete = async (visitId: string) => {
     try {
       await axios.delete(`http://localhost:4000/api/v1/visits/${visitId}`);
-      // Refresh the patient records after deletion
-      fetchPatientRecords();
+      fetchPatientRecords(); // Refresh the records
     } catch (error) {
       console.error('Error deleting visit:', error);
     }
@@ -60,26 +56,26 @@ const PatientsRecords = () => {
           <tbody>
             {patientRecords.length > 0 ? (
               patientRecords.map((record) => (
-                <tr key={record._id}>
+                <tr key={record.id}>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                    {new Date(record.visitDate).toLocaleDateString()}
+                    {new Date(record.cdate).toLocaleDateString()}
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                    {record.diseases.filter(disease => disease).join(', ')}
+                    {record.diseases.filter((disease) => disease).join(', ')}
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <div className="flex items-center space-x-3">
                       <button
                         aria-label="Edit"
                         className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
-                        onClick={() => handleEdit(record._id)}
+                        onClick={() => handleEdit(record.id)}
                       >
                         <FaEdit className="w-4 h-4" />
                       </button>
                       <button
                         aria-label="Delete"
                         className="bg-red-500 hover:bg-red-700 text-white p-1 rounded"
-                        onClick={() => handleDelete(record._id)}
+                        onClick={() => handleDelete(record.id)}
                       >
                         <FaTrash className="w-4 h-4" />
                       </button>
@@ -102,5 +98,3 @@ const PatientsRecords = () => {
 };
 
 export default PatientsRecords;
-
-

@@ -29,13 +29,13 @@ app.listen(PORT, () => {
 });
 
 
-app.put('/api/v1/patients/:patientId/family', async (req, res) => {
-    const { patientId } = req.params;
+app.put('/api/v1/patients/:patient_id/family', async (req, res) => {
+    const { patient_id } = req.params;
     const { familyId } = req.body;
   
     try {
       // Find the patient and update their family
-      const patient = await Patient.findById(patientId);
+      const patient = await Patient.findById(patient_id);
       if (!patient) {
         return res.status(404).json({ message: 'Patient not found' });
       }

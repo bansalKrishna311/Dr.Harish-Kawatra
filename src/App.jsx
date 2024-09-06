@@ -201,7 +201,7 @@ function App() {
           }
         />
        <Route
-          path="/patients/:patientId/records"
+          path="/patients/:patient_id/records"
           element={
             <DefaultLayout>
               <PageTitle title="Patient Records | Dr.Kawatra" />

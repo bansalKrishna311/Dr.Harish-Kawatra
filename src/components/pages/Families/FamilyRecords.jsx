@@ -23,8 +23,8 @@ const FamilyRecords = () => {
     fetchFamily();
   }, [id]);
 
-  const handlePatientViewClick = (patientId) => {
-    navigate(`/patients/${patientId}/records`);
+  const handlePatientViewClick = (patient_id) => {
+    navigate(`/patients/${patient_id}/records`);
   };
 
   const handleSearchChange = (event) => {

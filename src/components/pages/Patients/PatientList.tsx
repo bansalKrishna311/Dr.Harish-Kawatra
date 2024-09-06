@@ -23,10 +23,10 @@ const PatientList = () => {
     fetchPatients();
   }, []);
 
-  const handleDelete = async (patientId: string) => {
+  const handleDelete = async (patient_id: string) => {
     try {
-      await axios.delete(`http://localhost:4000/api/v1/patients/${patientId}`);
-      setPatients(patients.filter(patient => patient._id !== patientId));
+      await axios.delete(`http://localhost:4000/api/v1/patients/${patient_id}`);
+      setPatients(patients.filter(patient => patient._id !== patient_id));
     } catch (error) {
       console.error('Error deleting patient:', error);
     }
@@ -36,8 +36,8 @@ const PatientList = () => {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
-  const handleView = (patientId: string) => {
-    navigate(`/patients/${patientId}/records`);
+  const handleView = (patient_id: string) => {
+    navigate(`/patients/${patient_id}/records`);
   };
 
   const sortedPatients = patients
@@ -98,7 +98,7 @@ const PatientList = () => {
                     <button
                       aria-label="View"
                       className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => handleView(patient._id)}
+                      onClick={() => handleView(patient.id)}
                     >
                       <FaEye className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </button>

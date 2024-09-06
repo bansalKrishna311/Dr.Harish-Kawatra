@@ -60,7 +60,7 @@ const getPatientById = async (req, res) => {
 const getPatientVisits = async (req, res) => {
   try {
     console.log(req.query,req.params)
-      const visits = await Visit.find({ patientId: req.params.id });
+      const visits = await Visit.find({ patient_id: req.params.id });
       console.log('Visits:', visits);
       res.status(200).json(visits);
 

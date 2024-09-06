@@ -18,7 +18,7 @@ const EditVisit = () => {
       try {
         const response = await axios.get(`http://localhost:4000/api/v1/visits/${visitId}`);
         const visit = response.data;
-        setSelectedPatient(visit.patientId);
+        setSelectedPatient(visit.patient_id);
         setVisitDate(visit.visitDate);
         setSymptoms(visit.symptoms);
         setDiseases(visit.diseases);
@@ -42,7 +42,7 @@ const EditVisit = () => {
     e.preventDefault();
     
     const visitData = {
-      patientId: selectedPatient,
+      patient_id: selectedPatient,
       visitDate,
       symptoms,
       diseases,

@@ -3,7 +3,7 @@ import Select from 'react-select';
 import axios from 'axios';
 
 type FamilyDropdownProps = {
-  patientId: string;
+  patient_id: string;
 };
 
 type FamilyOption = {
@@ -11,7 +11,7 @@ type FamilyOption = {
   label: string;
 };
 
-const FamilyDropdown: React.FC<FamilyDropdownProps> = ({ patientId }) => {
+const FamilyDropdown: React.FC<FamilyDropdownProps> = ({ patient_id }) => {
   const [families, setFamilies] = useState<FamilyOption[]>([]);
   const [selectedFamily, setSelectedFamily] = useState<FamilyOption | null>(null);
 
@@ -38,10 +38,10 @@ const FamilyDropdown: React.FC<FamilyDropdownProps> = ({ patientId }) => {
     if (selectedOption) {
       try {
         // API call to update the patient's family in the backend
-        await axios.put(`http://localhost:4000/api/v1/patients/${patientId}/family`, {
+        await axios.put(`http://localhost:4000/api/v1/patients/${patient_id}/family`, {
           familyId: selectedOption.value,
         });
-        console.log(`Patient ${patientId} added to family ${selectedOption.label}`);
+        console.log(`Patient ${patient_id} added to family ${selectedOption.label}`);
       } catch (error) {
         console.error('Error updating family for patient:', error);
       }

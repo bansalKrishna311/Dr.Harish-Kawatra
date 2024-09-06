@@ -48,7 +48,7 @@ const ExistingPatient = () => {
     e.preventDefault();
     
     const visitData = {
-      patientId: selectedPatient,
+      patient_id: selectedPatient,
       visitDate,
       symptoms,
       diseases,
