@@ -97,7 +97,7 @@ const FamilyRecords = () => {
                     <button
                       aria-label="View"
                       className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => handlePatientViewClick(patient._id)}
+                      onClick={() => handlePatientViewClick(patient.id)}
                     >
                       <FaEye className="w-4 h-4" />
                     </button>
