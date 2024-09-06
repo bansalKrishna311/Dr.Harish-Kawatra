@@ -5,7 +5,7 @@ const { dbconnect } = require('./config/database');
 require('dotenv').config();
 
 app.use(cors({
-    origin: 'http://localhost:5173', 
+    // origin: 'http://localhost:5173', 
     origin:'https://dr-harish-kawatra.vercel.app/'// Adjust this to match your frontend URL
 }));
 app.use(express.json());
