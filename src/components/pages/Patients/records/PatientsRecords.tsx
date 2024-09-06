@@ -17,7 +17,7 @@ const PatientsRecords = () => {
   const fetchPatientRecords = async () => {
     if (patient_id) {
       try {
-        const response = await axios.get(`http://localhost:4000/api/v1/patients/${patient_id}/records`);
+        const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${patient_id}/records`);
         setPatientRecords(response.data);
       } catch (error) {
         console.error('Error fetching patient records:', error);
@@ -35,7 +35,7 @@ const PatientsRecords = () => {
 
   const handleDelete = async (visitId: string) => {
     try {
-      await axios.delete(`http://localhost:4000/api/v1/visits/${visitId}`);
+      await axios.delete(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`);
       fetchPatientRecords(); // Refresh the records
     } catch (error) {
       console.error('Error deleting visit:', error);

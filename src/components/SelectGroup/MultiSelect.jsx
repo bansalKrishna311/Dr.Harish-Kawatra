@@ -13,7 +13,7 @@ const MultiSelect = ({ selectedPatients, setSelectedPatients }) => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/v1/patients');
+        const response = await axios.get('https://dr-harish-kawatra.onrender.com/api/v1/patients');
         const patients = response.data.map((patient) => ({
           value: patient._id,
           text: patient.name,
