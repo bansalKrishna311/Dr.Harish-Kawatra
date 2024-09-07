@@ -7,7 +7,7 @@ interface Patient {
   name: string;
   age: string;
   gender: string;
-  date: string;
+  cdate: string;
   symptoms: string[];
   diseases: string[];
   medicines: string[];
@@ -22,15 +22,52 @@ const EditPatient = () => {
   const [diseases, setDiseases] = useState<string[]>([]);
   const [medicines, setMedicines] = useState<string[]>([]);
 
+  // Function to map old data format to new format
+  const mapOldDataToNewFormat = (oldData: any) => {
+    // Merge old diseases and past diseases
+    const mappedDiseases = [
+      ...(oldData.disease?.map((d: any) => d.ills) || []),
+      ...(oldData.pdisease?.map((d: any) => d.ill) || []),
+    ];
+
+    // Merge old medicines and past medicines
+    const mappedMedicines = [
+      ...(oldData.medicine?.map((m: any) => m.meds) || []),
+      ...(oldData.pmedicine?.map((m: any) => m.pmeds) || []),
+    ];
+
+    // Old format may not have symptoms, set empty if not present
+    const mappedSymptoms = oldData.symptoms || [];
+
+    return {
+      diseases: mappedDiseases,
+      medicines: mappedMedicines,
+      symptoms: mappedSymptoms,
+    };
+  };
+
   // Fetch patient data by ID
   useEffect(() => {
     const fetchPatient = async () => {
       try {
         const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${id}`);
-        setPatient(response.data);
-        setSymptoms(response.data.symptoms || []);
-        setDiseases(response.data.diseases || []);
-        setMedicines(response.data.medicines || []);
+        const patientData = response.data;
+
+        // Check if data is old format or new format and handle accordingly
+        const oldData = patientData.disease || patientData.pdisease || patientData.medicine || patientData.pmedicine;
+
+        if (oldData) {
+          const { diseases: oldDiseases, medicines: oldMedicines, symptoms: oldSymptoms } = mapOldDataToNewFormat(patientData);
+          setDiseases(oldDiseases);
+          setMedicines(oldMedicines);
+          setSymptoms(oldSymptoms);
+        } else {
+          setSymptoms(patientData.symptoms || []);
+          setDiseases(patientData.diseases || []);
+          setMedicines(patientData.medicines || []);
+        }
+
+        setPatient(patientData);
       } catch (error) {
         console.error('Error fetching patient:', error);
       }
@@ -129,12 +166,13 @@ const EditPatient = () => {
                 </label>
                 <input
                   type="date"
-                  value={patient.date}
-                  onChange={(e) => setPatient({ ...patient, date: e.target.value })}
+                  value={patient.cdate}
+                  onChange={(e) => setPatient({ ...patient, cdate: e.target.value })}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
 
+              {/* Symptoms */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Symptoms
@@ -166,8 +204,10 @@ const EditPatient = () => {
                 </button>
               </div>
 
+              {/* Diseases */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
+                <label
+                  className="mb-2.5 block text-black dark:text-white">
                   Diseases
                 </label>
                 {diseases.map((disease, index) => (
@@ -197,6 +237,7 @@ const EditPatient = () => {
                 </button>
               </div>
 
+              {/* Medicines */}
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Medicines
@@ -228,25 +269,34 @@ const EditPatient = () => {
                 </button>
               </div>
 
-              <div className="mb-6">
+              {/* Remarks */}
+              <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Remarks
                 </label>
                 <textarea
-                  rows={6}
-                  placeholder="Write any Remarks"
                   value={patient.remarks}
                   onChange={(e) => setPatient({ ...patient, remarks: e.target.value })}
+                  placeholder="Enter remarks"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
 
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center rounded bg-primary py-2 px-4 font-medium text-white hover:bg-opacity-90"
-              >
-                Save Patient
-              </button>
+              <div className="flex justify-end gap-4.5">
+                <button
+                  type="button"
+                  onClick={() => navigate('/patients')}
+                  className="rounded bg-gray-400 py-3 px-5 text-white hover:bg-gray-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded bg-primary py-3 px-5 text-white hover:bg-opacity-90"
+                >
+                  Update Patient
+                </button>
+              </div>
             </div>
           </form>
         </div>
