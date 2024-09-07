@@ -12,6 +12,9 @@ interface Patient {
   diseases: string[];
   medicines: string[];
   remarks: string;
+  historyDiseases: string[];
+  historyMedicines: string[];
+  historyRemarks: string;
 }
 
 const EditPatient = () => {
@@ -21,22 +24,22 @@ const EditPatient = () => {
   const [symptoms, setSymptoms] = useState<string[]>([]);
   const [diseases, setDiseases] = useState<string[]>([]);
   const [medicines, setMedicines] = useState<string[]>([]);
+  const [historyDiseases, setHistoryDiseases] = useState<string[]>([]);
+  const [historyMedicines, setHistoryMedicines] = useState<string[]>([]);
+  const [historyRemarks, setHistoryRemarks] = useState<string>('');
 
   // Function to map old data format to new format
   const mapOldDataToNewFormat = (oldData: any) => {
-    // Merge old diseases and past diseases
     const mappedDiseases = [
       ...(oldData.disease?.map((d: any) => d.ills) || []),
       ...(oldData.pdisease?.map((d: any) => d.ill) || []),
     ];
 
-    // Merge old medicines and past medicines
     const mappedMedicines = [
       ...(oldData.medicine?.map((m: any) => m.meds) || []),
       ...(oldData.pmedicine?.map((m: any) => m.pmeds) || []),
     ];
 
-    // Old format may not have symptoms, set empty if not present
     const mappedSymptoms = oldData.symptoms || [];
 
     return {
@@ -53,7 +56,6 @@ const EditPatient = () => {
         const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${id}`);
         const patientData = response.data;
 
-        // Check if data is old format or new format and handle accordingly
         const oldData = patientData.disease || patientData.pdisease || patientData.medicine || patientData.pmedicine;
 
         if (oldData) {
@@ -67,7 +69,12 @@ const EditPatient = () => {
           setMedicines(patientData.medicines || []);
         }
 
-        setPatient(patientData);
+        setPatient({
+          ...patientData,
+          historyDiseases: patientData.historyDiseases || [],
+          historyMedicines: patientData.historyMedicines || [],
+          historyRemarks: patientData.historyRemarks || '',
+        });
       } catch (error) {
         console.error('Error fetching patient:', error);
       }
@@ -102,6 +109,9 @@ const EditPatient = () => {
         symptoms,
         diseases,
         medicines,
+        historyDiseases,
+        historyMedicines,
+        historyRemarks,
       };
       await axios.put(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${id}`, updatedPatient);
       navigate('/patients'); // Redirect to the patients list after successful update
@@ -206,8 +216,7 @@ const EditPatient = () => {
 
               {/* Diseases */}
               <div className="mb-4.5">
-                <label
-                  className="mb-2.5 block text-black dark:text-white">
+                <label className="mb-2.5 block text-black dark:text-white">
                   Diseases
                 </label>
                 {diseases.map((disease, index) => (
@@ -277,22 +286,92 @@ const EditPatient = () => {
                 <textarea
                   value={patient.remarks}
                   onChange={(e) => setPatient({ ...patient, remarks: e.target.value })}
-                  placeholder="Enter remarks"
+                  placeholder="Remarks"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
 
-              <div className="flex justify-end gap-4.5">
+              {/* History Diseases */}
+              <div className="mb-4.5">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  History Diseases
+                </label>
+                {historyDiseases.map((historyDisease, index) => (
+                  <div key={index} className="flex items-center mb-2">
+                    <input
+                      type="text"
+                      value={historyDisease}
+                      onChange={(e) => handleChange(index, e.target.value, setHistoryDiseases)}
+                      placeholder="History Disease"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveField(index, setHistoryDiseases)}
+                      className="ml-2 text-red-600 hover:text-red-700"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
                 <button
                   type="button"
-                  onClick={() => navigate('/patients')}
-                  className="rounded bg-gray-400 py-3 px-5 text-white hover:bg-gray-500"
+                  onClick={() => handleAddField(setHistoryDiseases)}
+                  className="text-primary hover:underline"
                 >
-                  Cancel
+                  + Add History Disease
                 </button>
+              </div>
+
+              {/* History Medicines */}
+              <div className="mb-4.5">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  History Medicines
+                </label>
+                {historyMedicines.map((historyMedicine, index) => (
+                  <div key={index} className="flex items-center mb-2">
+                    <input
+                      type="text"
+                      value={historyMedicine}
+                      onChange={(e) => handleChange(index, e.target.value, setHistoryMedicines)}
+                      placeholder="History Medicine"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveField(index, setHistoryMedicines)}
+                      className="ml-2 text-red-600 hover:text-red-700"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => handleAddField(setHistoryMedicines)}
+                  className="text-primary hover:underline"
+                >
+                  + Add History Medicine
+                </button>
+              </div>
+
+              {/* History Remarks */}
+              <div className="mb-4.5">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  History Remarks
+                </label>
+                <textarea
+                  value={historyRemarks}
+                  onChange={(e) => setHistoryRemarks(e.target.value)}
+                  placeholder="History Remarks"
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                />
+              </div>
+
+              <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="rounded bg-primary py-3 px-5 text-white hover:bg-opacity-90"
+                  className="bg-primary text-white py-2 px-4 rounded hover:bg-primary-dark"
                 >
                   Update Patient
                 </button>

@@ -6,7 +6,7 @@ import SingleSelectPatient from './SingleSelectPatient';
 const EditVisit = () => {
   const { visitId } = useParams<{ visitId: string }>();
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
-  const [visitDate, setVisitDate] = useState('');
+  const [cdate, setcdate] = useState('');
   const [symptoms, setSymptoms] = useState<string[]>(['']);
   const [diseases, setDiseases] = useState<string[]>(['']);
   const [medicines, setMedicines] = useState<string[]>(['']);
@@ -19,7 +19,7 @@ const EditVisit = () => {
         const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`);
         const visit = response.data;
         setSelectedPatient(visit.patient_id);
-        setVisitDate(visit.visitDate);
+        setcdate(visit.cdate);
         setSymptoms(visit.symptoms);
         setDiseases(visit.diseases);
         setMedicines(visit.medicines);
@@ -43,7 +43,7 @@ const EditVisit = () => {
     
     const visitData = {
       patient_id: selectedPatient,
-      visitDate,
+      cdate,
       symptoms,
       diseases,
       medicines,
@@ -87,8 +87,8 @@ const EditVisit = () => {
                 </label>
                 <input
                   type="date"
-                  value={visitDate}
-                  onChange={(e) => setVisitDate(e.target.value)}
+                  value={cdate}
+                  onChange={(e) => setcdate(e.target.value)}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>

@@ -13,9 +13,24 @@ const visitSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  symptoms: [String],
-  diseases: [String],
-  medicines: [String],
+  symptoms: {
+    type: [String],
+    default: []
+  },
+  disease: [
+    {
+      ills: {
+        type: String,
+      }
+    }
+  ],
+  medicine: [
+    {
+      meds: {
+        type: String,
+      }
+    }
+  ],
   remarks: {
     type: String,
   },

@@ -329,42 +329,7 @@ const AddPatient = () => {
                 ></textarea>
               </div>
 
-              {/* Lab Report Upload */}
-              {/* <div className="mb-6">
-                <label className="mb-5 block text-black dark:text-white">
-                  Upload Lab Report (jpg, png, pdf)
-                </label>
-                <div className="relative mb-4.5 h-[250px] rounded-md border border-dashed border-primary bg-gray-100 dark:bg-[#212835]">
-                  <input
-                    type="file"
-                    onChange={handleFileChange}
-                    className="absolute top-0 left-0 h-full w-full cursor-pointer opacity-0"
-                  />
-                  <div className="flex h-full w-full items-center justify-center px-4 text-center">
-                    <div>
-                      <span className="mx-auto mb-2.5 flex h-14 w-14 items-center justify-center rounded-full bg-primary">
-                        <svg
-                          className="fill-white"
-                          width="40"
-                          height="40"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M7 16V8a4 4 0 0 1 8 0v8" />
-                          <line x1="12" y1="12" x2="12" y2="12" />
-                          <path d="M7 16l-2 2m0 0l-2-2m2 2V8" />
-                        </svg>
-                      </span>
-                      <p className="mt-2">Drop your file here or select to upload</p>
-                      <p className="mt-1.5 text-sm">jpg, png, pdf</p>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-
+         
               <button
                 type="submit"
                 className="mt-6 w-full rounded bg-primary p-3 text-white hover:bg-opacity-90"

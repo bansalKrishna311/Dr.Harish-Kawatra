@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 type PatientVisit = {
   id: string;
-  visitDate: string;
+  cdate: string;
   diseases: string[];
 };
 
