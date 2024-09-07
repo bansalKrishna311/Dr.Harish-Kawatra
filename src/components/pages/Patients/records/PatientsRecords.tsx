@@ -3,11 +3,16 @@ import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router-dom';
 
+type DiseaseType = {
+  ills: string;
+};
+
 type PatientVisit = {
   id: string;
   cdate?: string;   // Make cdate optional
   visitDate?: string; // Add visitDate as an optional field
   diseases: string[];
+  disease?: DiseaseType[]; // Add disease array to handle objects with ills
 };
 
 const PatientsRecords = () => {
@@ -62,7 +67,13 @@ const PatientsRecords = () => {
                     {new Date(record.cdate || record.visitDate || '').toLocaleDateString()}
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    {/* Display both diseases (string array) and disease (objects with ills) */}
                     {record.diseases.filter((disease) => disease).join(', ')}
+                    {record.disease && record.disease.length > 0 && (
+                      <div>
+                         {record.disease.map((d) => d.ills).join(', ')}
+                      </div>
+                    )}
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <div className="flex items-center space-x-3">
