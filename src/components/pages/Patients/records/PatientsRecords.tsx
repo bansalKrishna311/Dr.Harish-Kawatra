@@ -64,14 +64,19 @@ const PatientsRecords = () => {
               patientRecords.map((record) => (
                 <tr key={record.id}>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                    {new Date(record.cdate || record.visitDate || '').toLocaleDateString()}
+                    {/* Format date as date/month/year */}
+                    {new Date(record.cdate || record.visitDate || '').toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })}
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     {/* Display both diseases (string array) and disease (objects with ills) */}
                     {record.diseases.filter((disease) => disease).join(', ')}
                     {record.disease && record.disease.length > 0 && (
                       <div>
-                         {record.disease.map((d) => d.ills).join(', ')}
+                        {record.disease.map((d) => d.ills).join(', ')}
                       </div>
                     )}
                   </td>
