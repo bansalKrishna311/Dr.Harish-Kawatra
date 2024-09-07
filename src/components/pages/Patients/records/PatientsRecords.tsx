@@ -5,7 +5,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 type PatientVisit = {
   id: string;
-  cdate: string;
+  cdate?: string;   // Make cdate optional
+  visitDate?: string; // Add visitDate as an optional field
   diseases: string[];
 };
 
@@ -58,7 +59,7 @@ const PatientsRecords = () => {
               patientRecords.map((record) => (
                 <tr key={record.id}>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                    {new Date(record.cdate).toLocaleDateString()}
+                    {new Date(record.cdate || record.visitDate || '').toLocaleDateString()}
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     {record.diseases.filter((disease) => disease).join(', ')}
@@ -68,14 +69,14 @@ const PatientsRecords = () => {
                       <button
                         aria-label="Edit"
                         className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
-                        onClick={() => handleEdit(record._id)}
+                        onClick={() => handleEdit(record.id)}
                       >
                         <FaEdit className="w-4 h-4" />
                       </button>
                       <button
                         aria-label="Delete"
                         className="bg-red-500 hover:bg-red-700 text-white p-1 rounded"
-                        onClick={() => handleDelete(record._id)}
+                        onClick={() => handleDelete(record.id)}
                       >
                         <FaTrash className="w-4 h-4" />
                       </button>
