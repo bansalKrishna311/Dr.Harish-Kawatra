@@ -35,8 +35,8 @@ const PatientsRecords = () => {
     fetchPatientRecords();
   }, [patient_id]);
 
-  const handleEdit = (visitId: string) => {
-    navigate(`/edit-visit/${visitId}`);
+  const handleEdit = (_id: string) => {
+    navigate(`/edit-visit/${_id}`);
   };
 
   const handleDelete = async (visitId: string) => {
