@@ -83,21 +83,7 @@ const Login = () => {
                                 </div>
                             </div>
                            
-                            {/* remember me and forget pass ui */}
-                            {/* <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <input
-                                        id="remember_me"
-                                        name="remember_me"
-                                        type="checkbox"
-                                        className="h-4 w-4 rounded border-gray-300 dark:text-white dark:border-gray-600 dark:focus:ring-indigo-400 dark:focus:ring-offset-2"
-                                    />
-                                    <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-900">Remember me</label>
-                                </div>
-                                <div className="text-sm">
-                                    <a href="/" className="font-medium text-black-600 hover:text-black-500">Forgot your password?</a>
-                                </div>
-                            </div> */}
+                            
                             <div>
                                 <button
                                     type="submit"
