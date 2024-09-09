@@ -16,7 +16,7 @@ const EditVisit = () => {
   useEffect(() => {
     const fetchVisitData = async () => {
       try {
-        const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`);
+        const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${id}`);
         const visit = response.data;
         setSelectedPatient(visit.patient_id);
         setcdate(visit.cdate);
