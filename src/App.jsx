@@ -153,7 +153,7 @@ function App() {
             </DefaultLayout>
           }
         />
-        <Route
+        {/* <Route
           path="/"
           element={
             <LoginLayout>
@@ -170,7 +170,7 @@ function App() {
               <Signup />
             </LoginLayout>
           }
-        />
+        /> */}
 
         {/* Patients Routes */}
         <Route
