@@ -13,7 +13,7 @@ const FamilyRecords = () => {
   useEffect(() => {
     const fetchFamily = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/families/${id}`);
+        const response = await axios.get(`${process.env.BACKEND_PUBLIC_URL}/api/families/${id}`);
         setFamily(response.data);
       } catch (error) {
         console.error('Error fetching family:', error);

@@ -11,7 +11,7 @@ const FamilyList = () => {
   useEffect(() => {
     const fetchFamilies = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/families');
+        const response = await axios.get('${process.env.BACKEND_PUBLIC_URL}/api/families');
         setFamilies(response.data);
       } catch (error) {
         console.error('Error fetching families:', error);
@@ -31,7 +31,7 @@ const FamilyList = () => {
 
   const handleDeleteClick = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/families/${id}`);
+      await axios.delete(`${process.env.BACKEND_PUBLIC_URL}/api/families/${id}`);
       setFamilies(families.filter((family) => family._id !== id));
     } catch (error) {
       console.error('Error deleting family:', error);

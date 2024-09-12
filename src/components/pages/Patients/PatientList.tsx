@@ -13,7 +13,7 @@ const PatientList = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/v1/patients`);
+        const response = await axios.get(`${process.env.BACKEND_PUBLIC_URL}/api/v1/patients`);
         setPatients(response.data);
       } catch (error) {
         console.error('Error fetching patients:', error);
@@ -25,7 +25,7 @@ const PatientList = () => {
 
   const handleDelete = async (patient_id: string) => {
     try {
-      await axios.delete(`http://localhost:4000/api/v1/patients/${patient_id}`);
+      await axios.delete(`${process.env.BACKEND_PUBLIC_URL}/api/v1/patients/${patient_id}`);
       setPatients(patients.filter(patient => patient._id !== patient_id));
     } catch (error) {
       console.error('Error deleting patient:', error);

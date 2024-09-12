@@ -18,7 +18,7 @@ const FamilyDropdown: React.FC<FamilyDropdownProps> = ({ patient_id }) => {
   useEffect(() => {
     const fetchFamilies = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/v1/families'); // Update with your actual endpoint
+        const response = await axios.get('${process.env.BACKEND_PUBLIC_URL}/api/v1/families'); // Update with your actual endpoint
         const familyOptions = response.data.map((family: any) => ({
           value: family._id,
           label: family.name,
@@ -38,7 +38,7 @@ const FamilyDropdown: React.FC<FamilyDropdownProps> = ({ patient_id }) => {
     if (selectedOption) {
       try {
         // API call to update the patient's family in the backend
-        await axios.put(`http://localhost:4000/api/v1/patients/${patient_id}/family`, {
+        await axios.put(`${process.env.BACKEND_PUBLIC_URL}/api/v1/patients/${patient_id}/family`, {
           familyId: selectedOption.value,
         });
         console.log(`Patient ${patient_id} added to family ${selectedOption.label}`);

@@ -41,7 +41,7 @@ const PatientsRecords = () => {
 
   const handleDelete = async (visitId: string) => {
     try {
-      await axios.delete(`http://localhost:4000/api/v1/visits/${visitId}`);
+      await axios.delete(`${process.env.BACKEND_PUBLIC_URL}/api/v1/visits/${visitId}`);
       fetchPatientRecords(); // Refresh the records
     } catch (error) {
       console.error('Error deleting visit:', error);

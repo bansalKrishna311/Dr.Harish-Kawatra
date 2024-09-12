@@ -21,7 +21,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/signup', formData);
+      const response = await axios.post('${process.env.BACKEND_PUBLIC_URL}/api/v1/signup', formData);
       if (response.status === 200) {
         toast.success('Signup successful');
         navigate('/');
