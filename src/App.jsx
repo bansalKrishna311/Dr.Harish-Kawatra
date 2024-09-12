@@ -145,7 +145,7 @@ function App() {
       <Routes>
         {/* Home Route */}
         <Route
-          path="/home"
+          path="/"
           element={
             <DefaultLayout>
               <PageTitle title="Home | Dr.Kawatra" />
