@@ -53,7 +53,7 @@ const EditPatient = () => {
   useEffect(() => {
     const fetchPatient = async () => {
       try {
-        const response = await axios.get(`${process.env.BACKEND_PUBLIC_URL}/api/v1/patients/${id}`);
+        const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${id}`);
         const patientData = response.data;
 
         const oldData = patientData.disease || patientData.pdisease || patientData.medicine || patientData.pmedicine;
@@ -113,7 +113,7 @@ const EditPatient = () => {
         historyMedicines,
         historyRemarks,
       };
-      await axios.put(`${process.env.BACKEND_PUBLIC_URL}/api/v1/patients/${id}`, updatedPatient);
+      await axios.put(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${id}`, updatedPatient);
       navigate('/patients'); // Redirect to the patients list after successful update
     } catch (error) {
       console.error('Error updating patient:', error);

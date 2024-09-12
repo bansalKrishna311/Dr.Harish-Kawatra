@@ -12,7 +12,7 @@ const SingleSelectPatient = ({ selectedPatient, setSelectedPatient }) => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.get('${process.env.BACKEND_PUBLIC_URL}/api/v1/patients');
+        const response = await axios.get('https://dr-harish-kawatra.onrender.com/api/v1/patients');
         const patients = response.data.map((patient) => ({
           value: patient.id,
           text: patient.name,

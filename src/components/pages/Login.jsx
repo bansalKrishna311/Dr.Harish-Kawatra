@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
     if (email && password) {
       try {
-        const response = await axios.post('${process.env.BACKEND_PUBLIC_URL}/api/v1/login', { email, password });
+        const response = await axios.post('https://dr-harish-kawatra.onrender.com/api/v1/login', { email, password });
         if (response.status === 200) {
           handleLogin(response.data);
           toast.success('Login successful');

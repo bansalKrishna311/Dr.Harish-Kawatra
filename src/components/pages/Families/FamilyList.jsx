@@ -11,7 +11,7 @@ const FamilyList = () => {
   useEffect(() => {
     const fetchFamilies = async () => {
       try {
-        const response = await axios.get('${process.env.BACKEND_PUBLIC_URL}/api/families');
+        const response = await axios.get('https://dr-harish-kawatra.onrender.com/api/families');
         setFamilies(response.data);
       } catch (error) {
         console.error('Error fetching families:', error);
@@ -31,7 +31,7 @@ const FamilyList = () => {
 
   const handleDeleteClick = async (id) => {
     try {
-      await axios.delete(`${process.env.BACKEND_PUBLIC_URL}/api/families/${id}`);
+      await axios.delete(`https://dr-harish-kawatra.onrender.com/api/families/${id}`);
       setFamilies(families.filter((family) => family._id !== id));
     } catch (error) {
       console.error('Error deleting family:', error);

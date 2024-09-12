@@ -84,7 +84,7 @@ function App() {
     console.log('Updated form data:', updatedFormData);
     try {
       // Send the data to the backend
-      const response =await axios.post('${process.env.BACKEND_PUBLIC_URL}/api/v1/patients', updatedFormData);
+      const response =await axios.post('https://dr-harish-kawatra.onrender.com/api/v1/patients', updatedFormData);
       console.log('Patient saved:', response.data);
 
       // Add new patient data to local state

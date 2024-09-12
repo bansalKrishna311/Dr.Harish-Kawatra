@@ -16,7 +16,7 @@ const EditVisit = () => {
   useEffect(() => {
     const fetchVisitData = async () => {
       try {
-        const response = await axios.get(`${process.env.BACKEND_PUBLIC_URL}/api/v1/visits/${visitId}`);
+        const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`);
         const visit = response.data;
         setSelectedPatient(visit.patient_id);
         setcdate(visit.cdate);
@@ -51,7 +51,7 @@ const EditVisit = () => {
     };
 
     try {
-      await axios.put(`${process.env.BACKEND_PUBLIC_URL}/api/v1/visits/${visitId}`, visitData);
+      await axios.put(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`, visitData);
       alert('Visit updated successfully!');
       navigate(`/patients/${visitId}/records`);
     } catch (error) {

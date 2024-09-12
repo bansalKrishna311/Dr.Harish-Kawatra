@@ -15,7 +15,7 @@ const AddOrEditFamily = () => {
     if (isEdit) {
       const fetchFamily = async () => {
         try {
-          const response = await axios.get(`${process.env.BACKEND_PUBLIC_URL}/api/families/${id}`);
+          const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/families/${id}`);
           const family = response.data;
           setName(family.name);
           setRemarks(family.remarks);
@@ -39,10 +39,10 @@ const AddOrEditFamily = () => {
       };
 
       if (isEdit) {
-        await axios.put(`${process.env.BACKEND_PUBLIC_URL}/api/families/${id}`, familyData);
+        await axios.put(`https://dr-harish-kawatra.onrender.com/api/families/${id}`, familyData);
         alert('Family updated successfully');
       } else {
-        await axios.post('${process.env.BACKEND_PUBLIC_URL}/api/families', familyData);
+        await axios.post('https://dr-harish-kawatra.onrender.com/api/families', familyData);
         alert('Family added successfully');
       }
 
