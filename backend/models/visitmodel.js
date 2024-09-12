@@ -11,7 +11,7 @@ const visitSchema = new mongoose.Schema({
   },
   cdate: {
     type: Date,
-    required: true,
+    // required: true,
   },
   symptoms: {
     type: [String],
@@ -24,6 +24,7 @@ const visitSchema = new mongoose.Schema({
       }
     }
   ],
+  diseases:[],
   medicine: [
     {
       meds: {

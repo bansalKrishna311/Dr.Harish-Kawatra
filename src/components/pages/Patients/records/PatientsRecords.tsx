@@ -41,12 +41,14 @@ const PatientsRecords = () => {
 
   const handleDelete = async (visitId: string) => {
     try {
-      await axios.delete(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`);
+      await axios.delete(`http://localhost:4000/api/v1/visits/${visitId}`);
       fetchPatientRecords(); // Refresh the records
     } catch (error) {
       console.error('Error deleting visit:', error);
     }
   };
+
+  console.log({patientRecords},'debug')
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -73,26 +75,27 @@ const PatientsRecords = () => {
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     {/* Display both diseases (string array) and disease (objects with ills) */}
-                    {record.diseases.filter((disease) => disease).join(', ')}
-                    {record.disease && record.disease.length > 0 && (
+                    {record?.diseases?.filter((disease) => disease).join(', ')}
+                    {record?.disease && record?.disease?.length > 0 && (
                       <div>
-                        {record.disease.map((d) => d.ills).join(', ')}
+                        {record?.disease.map((d) => d.ills).join(', ')}
                       </div>
                     )}
+                    
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <div className="flex items-center space-x-3">
                       <button
                         aria-label="Edit"
                         className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
-                        onClick={() => handleEdit(record.id)}
+                        onClick={() => handleEdit(record._id)}
                       >
                         <FaEdit className="w-4 h-4" />
                       </button>
                       <button
                         aria-label="Delete"
                         className="bg-red-500 hover:bg-red-700 text-white p-1 rounded"
-                        onClick={() => handleDelete(record.id)}
+                        onClick={() => handleDelete(record._id)}
                       >
                         <FaTrash className="w-4 h-4" />
                       </button>
