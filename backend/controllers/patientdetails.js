@@ -33,6 +33,14 @@ const getPatients = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch patients', error });
   }
 };
+const getPatientsforvisit = async (req, res) => {
+  try {
+    const patients = await Patient.find();
+    res.status(200).json(patients);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch patients', error });
+  }
+};
 
 
 // Delete a patient by ID
@@ -89,5 +97,7 @@ module.exports = {
   deletePatient,
   updatePatient,
   getPatientById,
-  getPatientVisits
+  getPatientVisits,
+  getPatientsforvisit
+
 };

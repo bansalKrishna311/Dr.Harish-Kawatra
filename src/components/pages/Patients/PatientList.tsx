@@ -14,7 +14,7 @@ const PatientList = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients`, {
+        const response = await axios.get(`http://localhost:4000/api/v1/patients`, {
           params: { page: currentPage, limit: patientsPerPage, search: searchTerm },
         });
         setPatients(response.data.patients);
@@ -29,7 +29,7 @@ const PatientList = () => {
 
   const handleDelete = async (patient_id: string) => {
     try {
-      await axios.delete(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${patient_id}`);
+      await axios.delete(`http://localhost:4000/api/v1/patients/${patient_id}`);
       setPatients(patients.filter((patient) => patient._id !== patient_id));
     } catch (error) {
       console.error('Error deleting patient:', error);
