@@ -18,7 +18,7 @@ const ExistingPatient = () => {
     if (visitId) {
       const fetchVisitData = async () => {
         try {
-          const response = await axios.get(`http://localhost:4000/api/v1/visits/${visitId}`);
+          const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`);
           const visit = response.data;
           setSelectedPatient(selectedPatient);
 
@@ -59,10 +59,10 @@ const ExistingPatient = () => {
 
     try {
       if (isEditMode) {
-        await axios.put(`http://localhost:4000/api/v1/visits/${visitId}`, visitData);
+        await axios.put(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`, visitData);
         alert('Visit updated successfully!');
       } else {
-        await axios.post('http://localhost:4000/api/v1/visits', visitData);
+        await axios.post('https://dr-harish-kawatra.onrender.com/api/v1/visits', visitData);
         alert('Visit submitted successfully!');
       }
       navigate('/patients');

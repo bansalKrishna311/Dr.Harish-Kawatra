@@ -14,7 +14,7 @@
     useEffect(() => {
       const fetchPatients = async () => {
         try {
-          const response = await axios.get(`http://localhost:4000/api/v1/patients`, {
+          const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients`, {
             params: { page: currentPage, limit: patientsPerPage, search: searchTerm },
           });
           console.log(response.data.patients); // Check if id is present
@@ -31,7 +31,7 @@
 
     const handleDelete = async (id: Number) => {
       try {
-        await axios.delete(`http://localhost:4000/api/v1/patients/${id}`);
+        await axios.delete(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${id}`);
         setPatients(patients.filter((patient) => patient._id !== id));
       } catch (error) {
         console.error('Error deleting patient:', error);
