@@ -8,7 +8,7 @@ type DiseaseType = {
 };
 
 type PatientVisit = {
-  eid: string; // Use eid as the main identifier
+  _id: string; // Use _id as the main identifier
   patient_id: string; // Ensure patient_id is included
   cdate?: string;   
   visitDate?: string;
@@ -26,7 +26,7 @@ const PatientsRecords = () => {
   const fetchPatientRecords = async () => {
     if (patient_id) {
       try {
-        const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${patient_id}/records`);
+        const response = await axios.get(`http://localhost:4000/api/v1/patients/${patient_id}/records`);
         setPatientRecords(response.data);
       } catch (error) {
         console.error('Error fetching patient records:', error);
@@ -38,18 +38,19 @@ const PatientsRecords = () => {
     fetchPatientRecords();
   }, [patient_id]);
 
-  const handleEdit = (eid: string) => {
-    navigate(`/edit-visit/${eid}`); // Navigate based on eid
+  const handleEdit = (_id: string) => {
+    navigate(`/edit-visit/${_id}`); // Navigate based on _id
   };
 
-  const handleDelete = async (eid: string) => {
+  const handleDelete = async (_id: string) => {
     try {
-      await axios.delete(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${eid}`);
-      fetchPatientRecords(); // Refresh the records
+      await axios.delete(`http://localhost:4000/api/v1/visits/${_id}`);
+      fetchPatientRecords(); // Refresh the records after deletion
     } catch (error) {
       console.error('Error deleting visit:', error);
     }
   };
+  
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -65,7 +66,7 @@ const PatientsRecords = () => {
           <tbody>
             {patientRecords.length > 0 ? (
               patientRecords.map((record) => (
-                <tr key={record.eid}>
+                <tr key={record._id}>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     {new Date(record.cdate || record.visitDate || '').toLocaleDateString('en-GB', {
                       day: '2-digit',
@@ -84,14 +85,14 @@ const PatientsRecords = () => {
                       <button
                         aria-label="Edit"
                         className="bg-blue-500 hover:bg-blue-700 text-white p-1 rounded"
-                        onClick={() => handleEdit(record.eid)}
+                        onClick={() => handleEdit(record._id)}
                       >
                         <FaEdit className="w-4 h-4" />
                       </button>
                       <button
                         aria-label="Delete"
                         className="bg-red-500 hover:bg-red-700 text-white p-1 rounded"
-                        onClick={() => handleDelete(record.eid)}
+                        onClick={() => handleDelete(record._id)}
                       >
                         <FaTrash className="w-4 h-4" />
                       </button>

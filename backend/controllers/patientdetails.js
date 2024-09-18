@@ -13,7 +13,7 @@ const addPatient = async (req, res) => {
   }
 };
 const getPatients = async (req, res) => {
-  const { page = 1, limit = 100, search = '' } = req.query;
+  const { page = 1, limit = 25, search = '' } = req.query;
 
   try {
     // Get patients with pagination and optional search

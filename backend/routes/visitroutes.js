@@ -7,6 +7,7 @@ router.post('/visits', createVisit);
 router.get('/visits', getVisits);
 router.get('/visits/:id', getVisitById);
 router.put('/visits/:id', updateVisit);
-router.delete('/visits/:id', deleteVisit);
+router.delete('/visits/:_id', deleteVisit);
+
 
 module.exports = router;

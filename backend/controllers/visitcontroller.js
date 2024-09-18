@@ -49,13 +49,15 @@ const updateVisit = async (req, res) => {
 // Delete a visit by ID
 const deleteVisit = async (req, res) => {
   try {
-    const visit = await Visit.findByIdAndDelete(req.params.id);
+    const visit = await Visit.findOneAndDelete({ _id: req.params._id });
     if (!visit) return res.status(404).json({ error: 'Visit not found' });
     res.status(200).json({ message: 'Visit deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 
 module.exports = {
