@@ -1,20 +1,12 @@
 const Visit = require('../models/visitmodel');
-const mongoose = require('mongoose');
 
 // Create a new visit
 const createVisit = async (req, res) => {
   try {
-    const { patient_id, ...visitData } = req.body;
-    
-    // Convert patient_id to ObjectId if it's not already
-    const visit = new Visit({
-      ...visitData,
-      patient_id: mongoose.Types.ObjectId(patient_id)
-    });
-
+    const visit = new Visit(req.body);
     await visit.save();
     console.log('Visit:', visit);
-
+    
     res.status(201).json({ message: 'Visit added successfully', visit });
   } catch (error) {
     console.error('Error creating visit:', error);
@@ -25,7 +17,7 @@ const createVisit = async (req, res) => {
 // Get all visits
 const getVisits = async (req, res) => {
   try {
-    const visits = await Visit.find().populate('patient_id');
+    const visits = await Visit.find().populate('selectedPatient');
     res.status(200).json(visits);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -35,7 +27,7 @@ const getVisits = async (req, res) => {
 // Get a specific visit by ID
 const getVisitById = async (req, res) => {
   try {
-    const visit = await Visit.findById(req.params.id).populate('patient_id');
+    const visit = await Visit.findById(req.params.id).populate('selectedPatient');
     if (!visit) return res.status(404).json({ error: 'Visit not found' });
     res.status(200).json(visit);
   } catch (error) {
@@ -46,15 +38,7 @@ const getVisitById = async (req, res) => {
 // Update a visit by ID
 const updateVisit = async (req, res) => {
   try {
-    const { patient_id, ...visitData } = req.body;
-
-    // Convert patient_id to ObjectId
-    const updatedVisitData = {
-      ...visitData,
-      patient_id: mongoose.Types.ObjectId(patient_id)
-    };
-
-    const visit = await Visit.findByIdAndUpdate(req.params.id, updatedVisitData, { new: true });
+    const visit = await Visit.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!visit) return res.status(404).json({ error: 'Visit not found' });
     res.status(200).json({ message: 'Visit updated successfully', visit });
   } catch (error) {
@@ -72,6 +56,7 @@ const deleteVisit = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 module.exports = {
   createVisit,
