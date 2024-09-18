@@ -7,7 +7,7 @@ const PatientList = () => {
   const navigate = useNavigate();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [patientsPerPage] = useState(10); // This will control how many patients per page
+  const [patientsPerPage] = useState(100); // This will control how many patients per page
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
