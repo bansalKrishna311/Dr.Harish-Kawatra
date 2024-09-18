@@ -7,26 +7,30 @@ const PatientList = () => {
   const navigate = useNavigate();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [patientsPerPage] = useState(100);
+  const [patientsPerPage] = useState(10); // This will control how many patients per page
+  const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients`);
-        setPatients(response.data);
+        const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients`, {
+          params: { page: currentPage, limit: patientsPerPage, search: searchTerm },
+        });
+        setPatients(response.data.patients);
+        setTotalPages(response.data.totalPages);
       } catch (error) {
         console.error('Error fetching patients:', error);
       }
     };
 
     fetchPatients();
-  }, []);
+  }, [currentPage, patientsPerPage, searchTerm]);
 
   const handleDelete = async (patient_id: string) => {
     try {
       await axios.delete(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${patient_id}`);
-      setPatients(patients.filter(patient => patient._id !== patient_id));
+      setPatients(patients.filter((patient) => patient._id !== patient_id));
     } catch (error) {
       console.error('Error deleting patient:', error);
     }
@@ -34,19 +38,12 @@ const PatientList = () => {
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value.toLowerCase());
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handleView = (patient_id: string) => {
     navigate(`/patients/${patient_id}/records`);
   };
-
-  const sortedPatients = patients
-    .filter(patient => patient.name.toLowerCase().includes(searchTerm))
-    .sort((a, b) => a.name.localeCompare(b.name));
-
-  const indexOfLastPatient = currentPage * patientsPerPage;
-  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
-  const currentPatients = sortedPatients.slice(indexOfFirstPatient, indexOfLastPatient);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -72,12 +69,10 @@ const PatientList = () => {
             </tr>
           </thead>
           <tbody>
-            {currentPatients.map((patient) => (
+            {patients.map((patient) => (
               <tr key={patient._id}>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <h5 className="font-medium text-black dark:text-white">
-                    {patient.name}
-                  </h5>
+                  <h5 className="font-medium text-black dark:text-white">{patient.name}</h5>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3">
@@ -98,7 +93,7 @@ const PatientList = () => {
                     <button
                       aria-label="View"
                       className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => handleView(patient.id)}
+                      onClick={() => handleView(patient._id)}
                     >
                       <FaEye className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </button>
@@ -109,7 +104,7 @@ const PatientList = () => {
           </tbody>
         </table>
         <div className="flex justify-center mt-4">
-          {Array.from({ length: Math.ceil(sortedPatients.length / patientsPerPage) }, (_, i) => (
+          {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i}
               onClick={() => paginate(i + 1)}

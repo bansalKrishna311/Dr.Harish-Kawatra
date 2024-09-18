@@ -12,16 +12,28 @@ const addPatient = async (req, res) => {
     res.status(500).json({ message: 'Failed to add patient', error });
   }
 };
-
-// Get all patients (optional, if you need it)
 const getPatients = async (req, res) => {
+  const { page = 1, limit = 10, search = '' } = req.query;
+
   try {
-    const patients = await Patient.find();
-    res.status(200).json(patients);
+    // Get patients with pagination and optional search
+    const patients = await Patient.find({ name: { $regex: search, $options: 'i' } })
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit));
+
+    // Get total count of patients (useful for pagination)
+    const totalPatients = await Patient.countDocuments({ name: { $regex: search, $options: 'i' } });
+
+    res.status(200).json({
+      patients,
+      totalPages: Math.ceil(totalPatients / limit),
+      currentPage: parseInt(page),
+    });
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch patients', error });
   }
 };
+
 
 // Delete a patient by ID
 const deletePatient = async (req, res) => {
