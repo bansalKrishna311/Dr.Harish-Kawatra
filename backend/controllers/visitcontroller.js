@@ -27,7 +27,8 @@ const getVisits = async (req, res) => {
 // Get a specific visit by ID
 const getVisitById = async (req, res) => {
   try {
-    const visit = await Visit.findById(req.params.id).populate('selectedPatient');
+    const visit = await Visit.findById(req.params.id)
+    console.log('Visit:', visit);
     if (!visit) return res.status(404).json({ error: 'Visit not found' });
     res.status(200).json(visit);
   } catch (error) {

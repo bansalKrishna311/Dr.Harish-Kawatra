@@ -13,16 +13,26 @@ const EditVisit = () => {
   const [remarks, setRemarks] = useState('');
   const navigate = useNavigate();
 
+  const formatDateForInput = (isoDate) => {
+    const date = new Date(isoDate); // Create a Date object
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`; // Return in YYYY-MM-DD format
+  };
+
   useEffect(() => {
     const fetchVisitData = async () => {
       try {
         const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`);
         const visit = response.data;
+        console.log('visit',visit)
         setSelectedPatient(visit.patient_id);
-        setcdate(visit.cdate);
+        setcdate(formatDateForInput(visit.cdate));
+        console.log(visit.cdate)
         setSymptoms(visit.symptoms);
-        setDiseases(visit.diseases);
-        setMedicines(visit.medicines);
+        setDiseases(visit.disease);
+        setMedicines(visit.medicine);
         setRemarks(visit.remarks);
       } catch (error) {
         console.error('Error fetching visit data:', error);
@@ -135,7 +145,7 @@ const EditVisit = () => {
                   <div key={index} className="flex gap-2 mb-2">
                     <input
                       type="text"
-                      value={disease}
+                      value={disease.ills}
                       onChange={(e) => handleChange(index, e.target.value, setDiseases)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
@@ -168,7 +178,7 @@ const EditVisit = () => {
                   <div key={index} className="flex gap-2 mb-2">
                     <input
                       type="text"
-                      value={medicine}
+                      value={medicine.meds}
                       onChange={(e) => handleChange(index, e.target.value, setMedicines)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
