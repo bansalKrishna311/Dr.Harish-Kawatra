@@ -27,13 +27,15 @@ const EditVisit = () => {
       patient_id: data.patient_id || data.eid || '', // Handle both patient_id and eid
       cdate: data.cdate ? formatDateForInput(data.cdate) : '',
       symptoms: Array.isArray(data.symptoms) ? data.symptoms : [],
-      diseases: Array.isArray(data.diseases) ? data.diseases : [],
+      diseases: Array.isArray(data.disease) && data.disease.length > 0
+        ? data.disease.map((d: any) => d.name || d) // Adjust this mapping according to your actual disease data structure
+        : Array.isArray(data.diseases) ? data.diseases : [],
       medicines: Array.isArray(data.medicine) ? data.medicine.map(med => med.meds || med) : [],
       remarks: data.remarks || '',
     };
     return normalizedData;
   };
-
+  
   useEffect(() => {
     const fetchVisitData = async () => {
       try {
@@ -151,7 +153,7 @@ const EditVisit = () => {
                   <div key={index} className="flex gap-2 mb-2">
                     <input
                       type="text"
-                      value={disease}
+                      value={disease.ills}
                       onChange={(e) => handleChange(index, e.target.value, setDiseases)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
