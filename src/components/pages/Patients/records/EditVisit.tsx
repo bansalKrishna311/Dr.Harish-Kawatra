@@ -6,19 +6,32 @@ import SingleSelectPatient from './SingleSelectPatient';
 const EditVisit = () => {
   const { visitId } = useParams<{ visitId: string }>();
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
-  const [cdate, setcdate] = useState('');
+  const [cdate, setCdate] = useState('');
   const [symptoms, setSymptoms] = useState<string[]>(['']);
   const [diseases, setDiseases] = useState<string[]>(['']);
   const [medicines, setMedicines] = useState<string[]>(['']);
   const [remarks, setRemarks] = useState('');
   const navigate = useNavigate();
 
-  const formatDateForInput = (isoDate) => {
-    const date = new Date(isoDate); // Create a Date object
+  const formatDateForInput = (isoDate: string) => {
+    const date = new Date(isoDate);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`; // Return in YYYY-MM-DD format
+    return `${year}-${month}-${day}`;
+  };
+
+  // Normalize data based on the data source
+  const normalizeData = (data: any) => {
+    const normalizedData = {
+      patient_id: data.patient_id || data.eid || '', // Handle both patient_id and eid
+      cdate: data.cdate ? formatDateForInput(data.cdate) : '',
+      symptoms: Array.isArray(data.symptoms) ? data.symptoms : [],
+      diseases: Array.isArray(data.diseases) ? data.diseases : [],
+      medicines: Array.isArray(data.medicine) ? data.medicine.map(med => med.meds || med) : [],
+      remarks: data.remarks || '',
+    };
+    return normalizedData;
   };
 
   useEffect(() => {
@@ -26,14 +39,17 @@ const EditVisit = () => {
       try {
         const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/visits/${visitId}`);
         const visit = response.data;
-        console.log('visit',visit)
-        setSelectedPatient(visit.patient_id);
-        setcdate(formatDateForInput(visit.cdate));
-        console.log(visit.cdate)
-        setSymptoms(visit.symptoms);
-        setDiseases(visit.disease);
-        setMedicines(visit.medicine);
-        setRemarks(visit.remarks);
+        console.log('Raw visit data:', visit);
+        
+        const normalizedVisit = normalizeData(visit);
+        console.log('Normalized visit data:', normalizedVisit);
+
+        setSelectedPatient(normalizedVisit.patient_id);
+        setCdate(normalizedVisit.cdate);
+        setSymptoms(normalizedVisit.symptoms);
+        setDiseases(normalizedVisit.diseases);
+        setMedicines(normalizedVisit.medicines);
+        setRemarks(normalizedVisit.remarks);
       } catch (error) {
         console.error('Error fetching visit data:', error);
       }
@@ -50,7 +66,7 @@ const EditVisit = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const visitData = {
       patient_id: selectedPatient,
       cdate,
@@ -75,16 +91,12 @@ const EditVisit = () => {
       <div className="w-full">
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-            <h3 className="font-medium text-black dark:text-white">
-              Edit Patient Visit
-            </h3>
+            <h3 className="font-medium text-black dark:text-white">Edit Patient Visit</h3>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="p-6.5">
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Select a Patient
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Select a Patient</label>
                 <SingleSelectPatient
                   selectedPatient={selectedPatient}
                   setSelectedPatient={setSelectedPatient}
@@ -92,22 +104,18 @@ const EditVisit = () => {
               </div>
 
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Visit Date
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Visit Date</label>
                 <input
                   type="date"
                   value={cdate}
-                  onChange={(e) => setcdate(e.target.value)}
+                  onChange={(e) => setCdate(e.target.value)}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
 
               {/* Symptoms */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Symptoms
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Symptoms</label>
                 {symptoms.map((symptom, index) => (
                   <div key={index} className="flex gap-2 mb-2">
                     <input
@@ -138,14 +146,12 @@ const EditVisit = () => {
 
               {/* Diseases */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Diseases
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Diseases</label>
                 {diseases.map((disease, index) => (
                   <div key={index} className="flex gap-2 mb-2">
                     <input
                       type="text"
-                      value={disease.ills}
+                      value={disease}
                       onChange={(e) => handleChange(index, e.target.value, setDiseases)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
@@ -171,14 +177,12 @@ const EditVisit = () => {
 
               {/* Medicines */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Medicines
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Medicines</label>
                 {medicines.map((medicine, index) => (
                   <div key={index} className="flex gap-2 mb-2">
                     <input
                       type="text"
-                      value={medicine.meds}
+                      value={medicine}
                       onChange={(e) => handleChange(index, e.target.value, setMedicines)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
@@ -203,9 +207,7 @@ const EditVisit = () => {
               </div>
 
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Remarks
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Remarks</label>
                 <textarea
                   value={remarks}
                   onChange={(e) => setRemarks(e.target.value)}
@@ -228,4 +230,3 @@ const EditVisit = () => {
 };
 
 export default EditVisit;
- 

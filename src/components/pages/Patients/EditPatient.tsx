@@ -171,16 +171,15 @@ const EditPatient = () => {
               </div>
 
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Date
-                </label>
-                <input
-                  type="date"
-                  value={patient.cdate}
-                  onChange={(e) => setPatient({ ...patient, cdate: e.target.value })}
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
+  <label className="mb-2.5 block text-black dark:text-white">Date</label>
+  <input
+    type="date"
+    value={patient.cdate ? new Date(patient.cdate).toISOString().split('T')[0] : ''} // Format the date
+    onChange={(e) => setPatient({ ...patient, cdate: e.target.value })}
+    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+  />
+</div>
+
 
               {/* Symptoms */}
               <div className="mb-4.5">
