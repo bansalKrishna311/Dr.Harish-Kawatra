@@ -28,27 +28,6 @@ const EditPatient = () => {
   const [historyMedicines, setHistoryMedicines] = useState<string[]>([]);
   const [historyRemarks, setHistoryRemarks] = useState<string>('');
 
-  // Function to map old data format to new format
-  const mapOldDataToNewFormat = (oldData: any) => {
-    const mappedDiseases = [
-      ...(oldData.disease?.map((d: any) => d.ills) || []),
-      ...(oldData.pdisease?.map((d: any) => d.ill) || []),
-    ];
-
-    const mappedMedicines = [
-      ...(oldData.medicine?.map((m: any) => m.meds) || []),
-      ...(oldData.pmedicine?.map((m: any) => m.pmeds) || []),
-    ];
-
-    const mappedSymptoms = oldData.symptoms || [];
-
-    return {
-      diseases: mappedDiseases,
-      medicines: mappedMedicines,
-      symptoms: mappedSymptoms,
-    };
-  };
-
   // Fetch patient data by ID
   useEffect(() => {
     const fetchPatient = async () => {
@@ -56,25 +35,29 @@ const EditPatient = () => {
         const response = await axios.get(`https://dr-harish-kawatra.onrender.com/api/v1/patients/${id}`);
         const patientData = response.data;
 
-        const oldData = patientData.disease || patientData.pdisease || patientData.medicine || patientData.pmedicine;
-
-        if (oldData) {
-          const { diseases: oldDiseases, medicines: oldMedicines, symptoms: oldSymptoms } = mapOldDataToNewFormat(patientData);
-          setDiseases(oldDiseases);
-          setMedicines(oldMedicines);
-          setSymptoms(oldSymptoms);
-        } else {
-          setSymptoms(patientData.symptoms || []);
-          setDiseases(patientData.diseases || []);
-          setMedicines(patientData.medicines || []);
-        }
-
         setPatient({
-          ...patientData,
-          historyDiseases: patientData.historyDiseases || [],
-          historyMedicines: patientData.historyMedicines || [],
+          name: patientData.name,
+          age: patientData.age,
+          gender: patientData.gender,
+          cdate: patientData.cdate || patientData.date, // map date or cdate
+          symptoms: patientData.symptoms || [],
+          diseases: [
+            ...(patientData.disease.map((d: any) => d.ills) || []),
+            ...(patientData.diseases || [])
+          ],
+          medicines: [
+            ...(patientData.medicine.map((m: any) => m.meds) || []),
+            ...(patientData.medicines || [])
+          ],
+          remarks: patientData.remarks || '',
+          historyDiseases: patientData.historyDiseases.map((hd: any) => hd.pdisease.map((h: any) => h.ill)).flat() || [],
+          historyMedicines: patientData.historyMedicines.map((hm: any) => hm.pmedicine.map((h: any) => h.pmeds)).flat() || [],
           historyRemarks: patientData.historyRemarks || '',
         });
+
+        setSymptoms(patientData.symptoms || []);
+        setDiseases(patientData.diseases || []);
+        setMedicines(patientData.medicines || []);
       } catch (error) {
         console.error('Error fetching patient:', error);
       }
@@ -85,7 +68,10 @@ const EditPatient = () => {
     }
   }, [id]);
 
-  // Handle add, remove, and change for dynamic input fields
+  const handleChange = (index: number, value: string, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+    setter(prev => prev.map((item, i) => (i === index ? value : item)));
+  };
+
   const handleAddField = (setter: React.Dispatch<React.SetStateAction<string[]>>) => {
     setter(prev => [...prev, '']);
   };
@@ -94,11 +80,6 @@ const EditPatient = () => {
     setter(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleChange = (index: number, value: string, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
-    setter(prev => prev.map((item, i) => (i === index ? value : item)));
-  };
-
-  // Handle form submission (for updating the patient)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!patient) return; // Exit if patient data is not loaded
@@ -130,17 +111,13 @@ const EditPatient = () => {
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">
-              {id ? 'Edit Patient' : 'Add Existing Patient'}
+              Edit Patient
             </h3>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="p-6.5">
-              {/* Removed SelectGroupTwo component */}
-
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Name
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Name</label>
                 <input
                   type="text"
                   placeholder="Name"
@@ -151,9 +128,7 @@ const EditPatient = () => {
               </div>
 
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Age
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Age</label>
                 <input
                   type="text"
                   placeholder="Age"
@@ -164,28 +139,23 @@ const EditPatient = () => {
               </div>
 
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Gender
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Gender</label>
                 <SelectGroupOne value={patient.gender} onChange={(value) => setPatient({ ...patient, gender: value })} />
               </div>
 
               <div className="mb-4.5">
-  <label className="mb-2.5 block text-black dark:text-white">Date</label>
-  <input
-    type="date"
-    value={patient.cdate ? new Date(patient.cdate).toISOString().split('T')[0] : ''} // Format the date
-    onChange={(e) => setPatient({ ...patient, cdate: e.target.value })}
-    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-  />
-</div>
-
+                <label className="mb-2.5 block text-black dark:text-white">Date</label>
+                <input
+                  type="date"
+                  value={patient.cdate ? new Date(patient.cdate).toISOString().split('T')[0] : ''}
+                  onChange={(e) => setPatient({ ...patient, cdate: e.target.value })}
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                />
+              </div>
 
               {/* Symptoms */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Symptoms
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Symptoms</label>
                 {symptoms.map((symptom, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
@@ -215,9 +185,7 @@ const EditPatient = () => {
 
               {/* Diseases */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Diseases
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Diseases</label>
                 {diseases.map((disease, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
@@ -227,7 +195,7 @@ const EditPatient = () => {
                       placeholder="Disease"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
-                    <button
+                                       <button
                       type="button"
                       onClick={() => handleRemoveField(index, setDiseases)}
                       className="ml-2 text-red-600 hover:text-red-700"
@@ -247,9 +215,7 @@ const EditPatient = () => {
 
               {/* Medicines */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Medicines
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Medicines</label>
                 {medicines.map((medicine, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
@@ -279,9 +245,7 @@ const EditPatient = () => {
 
               {/* Remarks */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Remarks
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">Remarks</label>
                 <textarea
                   value={patient.remarks}
                   onChange={(e) => setPatient({ ...patient, remarks: e.target.value })}
@@ -292,9 +256,7 @@ const EditPatient = () => {
 
               {/* History Diseases */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  History Diseases
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">History Diseases</label>
                 {historyDiseases.map((historyDisease, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
@@ -324,9 +286,7 @@ const EditPatient = () => {
 
               {/* History Medicines */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  History Medicines
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">History Medicines</label>
                 {historyMedicines.map((historyMedicine, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
@@ -356,9 +316,7 @@ const EditPatient = () => {
 
               {/* History Remarks */}
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  History Remarks
-                </label>
+                <label className="mb-2.5 block text-black dark:text-white">History Remarks</label>
                 <textarea
                   value={historyRemarks}
                   onChange={(e) => setHistoryRemarks(e.target.value)}
@@ -366,15 +324,14 @@ const EditPatient = () => {
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
-
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="bg-primary text-white py-2 px-4 rounded hover:bg-primary-dark"
-                >
-                  Update Patient
-                </button>
-              </div>
+            </div>
+            <div className="p-6.5 border-t border-stroke dark:border-strokedark flex justify-end">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark"
+              >
+                Update Patient
+              </button>
             </div>
           </form>
         </div>
@@ -384,3 +341,4 @@ const EditPatient = () => {
 };
 
 export default EditPatient;
+
